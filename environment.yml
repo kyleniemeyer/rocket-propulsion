@@ -1,16 +1,13 @@
-name: thermo-env
+name: rocket-env
 channels:
  - cantera
  - conda-forge
 dependencies:
- - cantera
  - matplotlib
  - numpy
  - scipy
  - pint
- - coolprop
  - pandas
- - sympy
 # dependencies for building book
  - pip:
     - jupyter-book
