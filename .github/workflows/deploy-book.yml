@@ -1,10 +1,10 @@
 name: deploy-book
 
-# Only run this when the master branch changes
+# Only run this when the main branch changes
 on:
   push:
     branches:
-    - master
+    - main
 
 # This job installs dependencies, build the book, and pushes it to `gh-pages`
 jobs:
