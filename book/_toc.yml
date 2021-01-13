@@ -8,6 +8,7 @@
 - part: Fundamentals
   chapters:
     - file: fundamentals/thrust-rocket-equation
+    - file: fundamentals/staging
 
 - part: Reference
   chapters:
