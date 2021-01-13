@@ -1,0 +1,47 @@
+# Book settings
+title: Rocket Propulsion Notes
+author: Kyle Niemeyer
+copyright: "2021"
+logo: "logo.jpg"
+
+email: kyle.niemeyer@oregonstate.edu
+
+description: >- # this means to ignore newlines until "baseurl:"
+  This is a collection of examples in rocket propulsion 
+
+execute_notebooks: auto
+
+parse:
+  myst_extended_syntax: true
+
+html:
+  favicon: images/logo/favicon.ico
+  home_page_in_navbar: true
+  use_repository_button: true
+  extra_navbar: Powered by <a href="https://jupyterbook.org">Jupyter Book</a>  # Will be displayed underneath the left navbar.
+
+#baseurl: "/computational-thermo" # the subpath of your site, e.g. /blog. If there is no subpath for your site, use an empty string ""
+#url: "https://kyleniemeyer.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+repository:
+  url: https://github.com/kyleniemeyer/rocket-propulsion
+  branch: newbackend
+  path_to_book: "book"
+
+launch_buttons:
+  binderhub_url: "https://mybinder.org"
+  thebelab: true
+
+binder:
+  binderhub_url: "https://mybinder.org"
+  text: "Launch binder"
+
+sphinx:
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+#  extra_extensions: []
+
+latex:
+  latex_documents:
+    targetname: book.tex
+  latex_engine: pdflatex  # one of 'pdflatex', 'xelatex' (recommended for unicode), 'luatex', 'platex', 'uplatex'

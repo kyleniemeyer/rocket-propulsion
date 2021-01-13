@@ -1,0 +1,15 @@
+
+- file: intro
+
+- part: Getting started
+  chapters:
+    - file: solving-tips
+    
+- part: Fundamentals
+  chapters:
+    - file: fundamentals/thrust-rocket-equation
+
+- part: Reference
+  chapters:
+  - file: zbibliography
+  - file: contributing
