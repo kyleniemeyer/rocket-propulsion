@@ -342,6 +342,12 @@ g(h) &amp;= g_0 \left( \frac{R_0}{R_0 + h} \right)^2 \;,
 <span class="math notranslate nohighlight">\(H_n\)</span> = 10.4 km is the height scale of the exponential fall,
 <span class="math notranslate nohighlight">\(R_0\)</span> = 6378.388 km is the mean radius of Earth, and
 <span class="math notranslate nohighlight">\(g_0\)</span> = 9.80665 m/s<sup>2</sup> is the sea-level acceleration due to gravity.</p>
+<div class="margin sidebar">
+<p class="sidebar-title">Exponential approximations</p>
+<p>The exponential approximations we use for the variation of density and pressure
+in the atmosphere are only so good; more-accurate calculations would need to
+use a better model.</p>
+</div>
 <div class="section" id="coefficient-of-drag">
 <h3>Coefficient of drag<a class="headerlink" href="#coefficient-of-drag" title="Permalink to this headline">¶</a></h3>
 <p>Coefficient of drag is more difficult to handle, since it depends on angle of
@@ -369,12 +375,6 @@ p(h) = p_0 e^{-h / H_p} \;,
 <p>where <span class="math notranslate nohighlight">\(p_0\)</span> = 101325 Pa is the sea-level standard atmospheric pressure
 and <span class="math notranslate nohighlight">\(H_p\)</span> = 8.4 km.
 With <span class="math notranslate nohighlight">\(\gamma = 1.4\)</span> being a reasonable constant, we can now calculate Mach number based on velocity and altitude.</p>
-<div class="sidebar">
-<p class="sidebar-title">Exponential approximations</p>
-<p>The exponential approximations we use for the variation of density and pressure
-in the atmosphere are only so good; more-accurate calculations would need to
-use a better model.</p>
-</div>
 <p>Now, we need to obtain a functional dependence of <span class="math notranslate nohighlight">\(C_D (M)\)</span>;
 based on <a class="reference internal" href="#v2-diagrams"><span class="std std-numref">Fig. 1</span></a>, we see that the relationship is fairly complex.
 The “easiest” way to create a function for <span class="math notranslate nohighlight">\(C_D (M)\)</span> is to:</p>
@@ -402,7 +402,7 @@ The “easiest” way to create a function for <span class="math notranslate noh
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/thrust-rocket-equation_6_0.png" src="../_images/thrust-rocket-equation_6_0.png" />
+<img alt="../_images/thrust-rocket-equation_7_0.png" src="../_images/thrust-rocket-equation_7_0.png" />
 </div>
 </div>
 <p>In Matlab, the equivalent fit can be done with:</p>
@@ -498,7 +498,7 @@ The “easiest” way to create a function for <span class="math notranslate noh
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/thrust-rocket-equation_10_0.png" src="../_images/thrust-rocket-equation_10_0.png" />
+<img alt="../_images/thrust-rocket-equation_11_0.png" src="../_images/thrust-rocket-equation_11_0.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Burnout velocity:  1956.11 m/s
 Burnout altitude:  44.54 km
 </pre></div>
