@@ -9,6 +9,7 @@
   chapters:
     - file: fundamentals/thrust-rocket-equation
     - file: fundamentals/staging
+    - file: fundamentals/ideal-rocket
 
 - part: Reference
   chapters:
