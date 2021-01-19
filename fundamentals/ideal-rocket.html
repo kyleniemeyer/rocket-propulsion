@@ -264,6 +264,11 @@
    Area ratio
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#designing-rocket-nozzles">
+   Designing rocket nozzles
+  </a>
+ </li>
 </ul>
 
         </nav>
@@ -282,6 +287,8 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># this line makes figures interactive in Jupyter notebooks</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -339,12 +346,67 @@ c &amp;= c^* C_F \;.
 from the nozzle pressure ratio:</p>
 <div class="math notranslate nohighlight">
 \[
-\frac{A_e}{A_t} = \left( \frac{2}{\gamma+1}\right)^{\frac{1}{\gamma+1}} \left( \frac{p_e}{p_0} \right)^{\frac{-1}{\gamma}} \sqrt{ \frac{\gamma-1}{\gamma+1} \left[1 - \left( \frac{p_e}{p_0}\right)^{\frac{\gamma-1}{\gamma}} \right]^{-1} }
+\frac{A_e}{A_t} = \epsilon = \left( \frac{2}{\gamma+1}\right)^{\frac{1}{\gamma-1}} \left( \frac{p_0}{p_e} \right)^{\frac{1}{\gamma}} \sqrt{ \frac{\gamma-1}{\gamma+1} \left[1 - \left( \frac{p_0}{p_e}\right)^{\frac{1-\gamma}{\gamma}} \right]^{-1} } \;,
 \]</div>
+<p>where <span class="math notranslate nohighlight">\(\frac{p_0}{p_e}\)</span> is the pressure ratio (chamber pressure to nozzle exit pressure).</p>
+</div>
+<div class="section" id="designing-rocket-nozzles">
+<h2>Designing rocket nozzles<a class="headerlink" href="#designing-rocket-nozzles" title="Permalink to this headline">¶</a></h2>
+<p>Rocket scientists (… rocket engineers) have used the above equations for thrust
+coefficient, area ratio, and Mach number to design rockets for many years.</p>
+<p>For example, the following figures show area ratio vs. pressure ratio, and
+thrust coefficient (at optimum expansion conditions, where <span class="math notranslate nohighlight">\(p_e = p_a\)</span>)
+vs. pressure ratio, both for various specific heat ratios:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">root_scalar</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## area ratio as a function of pressure ratio</span>
+
+<span class="n">gammas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">]</span>
+<span class="n">pressure_ratios</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;$\gamma = 1.1$&#39;</span><span class="p">,</span> <span class="s1">&#39;1.25&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4&#39;</span><span class="p">,</span> <span class="s1">&#39;1.7&#39;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">calc_area_ratio</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates area ratio based on specific heat ratio and pressure ratio.</span>
+<span class="sd">    pressure ratio: chamber / exit</span>
+<span class="sd">    area ratio: exit / throat</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> 
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span>
+                <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">gamma</span><span class="p">)</span><span class="o">/</span><span class="n">gamma</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="p">)</span>
+
+<span class="k">for</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gammas</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="n">area_ratios</span> <span class="o">=</span> <span class="n">calc_area_ratio</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratios</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pressure_ratios</span><span class="p">,</span> <span class="n">area_ratios</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="mf">0.9</span><span class="o">*</span><span class="n">pressure_ratios</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">],</span> <span class="mf">1.01</span><span class="o">*</span><span class="n">area_ratios</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">],</span> 
+        <span class="n">label</span><span class="p">,</span>
+        <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span>
+        <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1e4</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Pressure ratio, $\frac</span><span class="si">{p_0}{p_e}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Area ratio, $\epsilon = \frac</span><span class="si">{A_e}{A_t}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Area ratio vs. pressure ratio&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ideal-rocket_8_0.png" src="../_images/ideal-rocket_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">root_scalar</span>
 
 <span class="k">def</span> <span class="nf">calc_thrust_coeff</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; Calculates thrust coefficient for optimum expansion (exit = ambient pressure). </span>
@@ -370,18 +432,18 @@ from the nozzle pressure ratio:</p>
         <span class="p">)</span>
 
 <span class="n">gammas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;$\gamma = 1.1$&#39;</span><span class="p">,</span> <span class="s1">&#39;1.2&#39;</span><span class="p">,</span> <span class="s1">&#39;1.3&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4&#39;</span><span class="p">]</span>
 <span class="n">area_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
 
 <span class="n">pressure_ratios</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="n">gammas</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gammas</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="n">thrust_coeffs</span> <span class="o">=</span> <span class="n">calc_thrust_coeff</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratios</span><span class="p">)</span>
     
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pressure_ratios</span><span class="p">,</span> <span class="n">thrust_coeffs</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
         <span class="mf">0.9</span><span class="o">*</span><span class="n">pressure_ratios</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.01</span><span class="o">*</span><span class="n">thrust_coeffs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
-        <span class="sa">r</span><span class="s1">&#39;$\gamma =$&#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">gamma</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-        <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span>
+        <span class="n">label</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span>
         <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">area_ratio</span> <span class="ow">in</span> <span class="n">area_ratios</span><span class="p">:</span>
@@ -399,21 +461,19 @@ from the nozzle pressure ratio:</p>
         <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span>
         <span class="p">)</span>
     
-
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;$\epsilon = \frac</span><span class="si">{A_e}{A_t}</span><span class="s1">$&#39;</span><span class="p">)</span>
-    
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1e4</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Pressure ratio, $p_0/p_e$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Thrust coefficient, $C_F$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Thrust coefficient vs. pressure ratio, at optimum expansion&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ideal-rocket_7_0.png" src="../_images/ideal-rocket_7_0.png" />
+<img alt="../_images/ideal-rocket_9_0.png" src="../_images/ideal-rocket_9_0.png" />
 </div>
 </div>
 </div>
