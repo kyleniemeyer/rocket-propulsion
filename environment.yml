@@ -1,6 +1,6 @@
 name: rocket-env
 channels:
- - cantera
+ - cantera/label/dev
  - conda-forge
 dependencies:
  - matplotlib
@@ -8,6 +8,8 @@ dependencies:
  - scipy
  - pint
  - pandas
+ - cantera
+ - fluids
 # dependencies for building book
  - pip:
     - jupyter-book
