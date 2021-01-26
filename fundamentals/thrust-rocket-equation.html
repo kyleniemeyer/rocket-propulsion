@@ -45,7 +45,7 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
@@ -536,7 +536,7 @@ Burnout altitude:  44.54 km
 
 <span class="n">f</span> <span class="p">=</span> <span class="p">@(</span><span class="n">t</span><span class="p">,</span><span class="n">z</span><span class="p">)</span> <span class="n">rocket</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">Isp</span><span class="p">,</span> <span class="n">mp</span><span class="p">,</span> <span class="n">tb</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">coef_drag</span><span class="p">);</span>
 
-<span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">]</span> <span class="p">=</span> <span class="n">ode45</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span> <span class="n">m0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span> <span class="n">tb</span><span class="p">]);</span>
+<span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">]</span> <span class="p">=</span> <span class="n">ode45</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span> <span class="n">tb</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span> <span class="n">m0</span><span class="p">]);</span>
 
 <span class="n">function</span> <span class="s">dzdt</span> <span class="p">=</span> <span class="n">rocket</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">Isp</span><span class="p">,</span> <span class="n">mp</span><span class="p">,</span> <span class="n">tb</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">coef_drag</span><span class="p">)</span>
 <span class="n">g0</span> <span class="p">=</span> <span class="mf">9.80665</span><span class="p">;</span> <span class="n">Re</span> <span class="p">=</span> <span class="mf">6378.388</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">;</span>
@@ -551,9 +551,10 @@ Burnout altitude:  44.54 km
 <span class="n">rho0</span> <span class="p">=</span> <span class="mf">1.225</span><span class="p">;</span>
 <span class="n">p0</span> <span class="p">=</span> <span class="mi">101325</span><span class="p">;</span>
 <span class="n">Hn</span> <span class="p">=</span> <span class="mi">10400</span><span class="p">;</span>
+<span class="n">Hp</span> <span class="p">=</span> <span class="mi">8400</span><span class="p">;</span>
 <span class="nb">gamma</span> <span class="p">=</span> <span class="mf">1.4</span><span class="p">;</span>
 <span class="n">rho</span> <span class="p">=</span> <span class="n">rho0</span> <span class="o">*</span> <span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">h</span> <span class="o">/</span> <span class="n">Hn</span><span class="p">);</span>
-<span class="n">pres</span> <span class="p">=</span> <span class="n">p0</span> <span class="o">+</span> <span class="n">g</span><span class="o">*</span><span class="n">rho0</span><span class="o">*</span><span class="n">Hn</span><span class="o">*</span><span class="p">(</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">h</span><span class="o">/</span><span class="n">Hn</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="n">pres</span> <span class="p">=</span> <span class="n">p0</span> <span class="o">*</span> <span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">h</span> <span class="o">/</span> <span class="n">Hp</span><span class="p">);</span>
 
 <span class="n">area</span> <span class="p">=</span> <span class="nb">pi</span> <span class="o">*</span> <span class="n">D</span>^<span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span>
 <span class="n">M</span> <span class="p">=</span> <span class="n">v</span> <span class="o">/</span> <span class="nb">sqrt</span><span class="p">(</span><span class="nb">gamma</span> <span class="o">*</span> <span class="n">pres</span> <span class="o">/</span> <span class="n">rho</span><span class="p">);</span>

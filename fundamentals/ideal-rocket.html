@@ -45,7 +45,7 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
@@ -536,12 +536,12 @@ Find the nozzle area ratio, and the rocket thrust as a function of nozzle exit a
         <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">gamma</span><span class="p">)</span><span class="o">/</span><span class="n">gamma</span><span class="p">))</span>
         <span class="p">)</span>
     <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Nozzle area ratio: </span><span class="si">{</span><span class="n">area_ratio</span><span class="si">:</span><span class="s1"> 3.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Nozzle area ratio: </span><span class="si">{</span><span class="n">area_ratio</span><span class="si">:</span><span class="s1"> 3.2f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nozzle area ratio: 9.06 dimensionless
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nozzle area ratio: 9.06
 </pre></div>
 </div>
 </div>
@@ -563,16 +563,16 @@ T = C_F^0 p_c A_e \frac{A_t}{A_e} \;.
     <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> 
     <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">pressure_ratio</span><span class="p">,</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">gamma</span><span class="p">))</span>
     <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust coefficient = </span><span class="si">{</span><span class="n">thrust_coeff</span><span class="si">:</span><span class="s1"> 3.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust coefficient = </span><span class="si">{</span><span class="n">thrust_coeff</span><span class="si">:</span><span class="s1"> 3.2f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="n">thrust_per_area</span> <span class="o">=</span> <span class="n">thrust_coeff</span> <span class="o">*</span> <span class="n">chamber_pressure</span> <span class="o">/</span> <span class="n">area_ratio</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust = (</span><span class="si">{</span><span class="n">thrust_per_area</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kPa&quot;</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s1"> 5.3e</span><span class="si">}</span><span class="s1"> * A_e)&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust = (</span><span class="si">{</span><span class="n">thrust_per_area</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> 5.1f~P</span><span class="si">}</span><span class="s1"> * A_e)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Thrust coefficient = 1.60 dimensionless
-Thrust = (1.252e+00 kilopascal * A_e)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Thrust coefficient = 1.60
+Thrust = (1252.5 kPa * A_e)
 </pre></div>
 </div>
 </div>
@@ -673,23 +673,23 @@ Pressure ratio (p_c/p_e): 264.2 dimensionless
 \[\begin{split}
 \begin{align*}
 \frac{A_e}{A_t} &amp;= f \left( \gamma, \frac{p_c}{p_e} \right) \\
-C_F = &amp;= C_F^0 = g \left( \gamma, \frac{p_c}{p_e} \right) \\
+C_F &amp;= C_F^0 = g \left( \gamma, \frac{p_c}{p_e} \right) \\
 \end{align*}
 \end{split}\]</div>
 <p>which are defined in Equations <a class="reference internal" href="#equation-area-ratio">(1)</a> and <a class="reference internal" href="#equation-thrust-coefficient">(2)</a> above—and we have already written functions to evaluate them!.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">area_ratio</span> <span class="o">=</span> <span class="n">calc_area_ratio</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Area ratio: </span><span class="si">{</span><span class="n">area_ratio</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Area ratio: </span><span class="si">{</span><span class="n">area_ratio</span><span class="o">.</span><span class="n">to_base_units</span><span class="p">()</span><span class="si">:</span><span class="s1"> .2f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="n">thrust_coeff</span> <span class="o">=</span> <span class="n">calc_thrust_coeff</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust coefficient: </span><span class="si">{</span><span class="n">thrust_coeff</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust coefficient: </span><span class="si">{</span><span class="n">thrust_coeff</span><span class="o">.</span><span class="n">to_base_units</span><span class="p">()</span><span class="si">:</span><span class="s1"> .2f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Area ratio: 0.00 bar ** 0.833333 / pascal ** 0.833333
-Thrust coefficient: 1.75 dimensionless
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Area ratio: 25.10
+Thrust coefficient: 1.75
 </pre></div>
 </div>
 </div>
@@ -697,16 +697,16 @@ Thrust coefficient: 1.75 dimensionless
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">throat_area</span> <span class="o">=</span> <span class="n">thrust_10k</span> <span class="o">/</span> <span class="p">(</span><span class="n">thrust_coeff</span> <span class="o">*</span> <span class="n">chamber_pressure</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Throat area: </span><span class="si">{</span><span class="n">throat_area</span><span class="si">:</span><span class="s1"> .2e</span><span class="si">}</span><span class="s1"> m^2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Throat area: </span><span class="si">{</span><span class="n">throat_area</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;m^2&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .4f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="n">throat_diameter</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">throat_area</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Throat diameter: </span><span class="si">{</span><span class="n">throat_diameter</span><span class="si">:</span><span class="s1"> .3f</span><span class="si">}</span><span class="s1"> m&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Throat diameter: </span><span class="si">{</span><span class="n">throat_diameter</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .3f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Throat area: 8.17e+02 newton / bar m^2
-Throat diameter: 32.260 newton ** 0.5 / bar ** 0.5 m
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Throat area: 0.0082 m²
+Throat diameter: 0.102 m
 </pre></div>
 </div>
 </div>
@@ -714,16 +714,16 @@ Throat diameter: 32.260 newton ** 0.5 / bar ** 0.5 m
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exit_area</span> <span class="o">=</span> <span class="n">area_ratio</span> <span class="o">*</span> <span class="n">throat_area</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exit area: </span><span class="si">{</span><span class="n">exit_area</span><span class="si">:</span><span class="s1"> .2e</span><span class="si">}</span><span class="s1"> m^2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exit area: </span><span class="si">{</span><span class="n">exit_area</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;m^2&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .2e~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="n">exit_diameter</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">exit_area</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exit diameter: </span><span class="si">{</span><span class="n">exit_diameter</span><span class="si">:</span><span class="s1"> .3f</span><span class="si">}</span><span class="s1"> m&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exit diameter: </span><span class="si">{</span><span class="n">exit_diameter</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .3f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Exit area: 1.40e+00 newton / bar ** 0.166667 / pascal ** 0.833333 m^2
-Exit diameter: 1.334 newton ** 0.5 / bar ** 0.0833333 / pascal ** 0.416667 m
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Exit area: 2.05e-01 m²
+Exit diameter: 0.511 m
 </pre></div>
 </div>
 </div>
@@ -731,25 +731,25 @@ Exit diameter: 1.334 newton ** 0.5 / bar ** 0.0833333 / pascal ** 0.416667 m
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mass_flow_rate</span> <span class="o">=</span> <span class="n">chamber_pressure</span> <span class="o">*</span> <span class="n">throat_area</span> <span class="o">/</span> <span class="n">c_star</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mass flow rate: </span><span class="si">{</span><span class="n">mass_flow_rate</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1"> kg/s&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mass flow rate: </span><span class="si">{</span><span class="n">mass_flow_rate</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kg/s&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .2f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mass flow rate: 38.14 newton * second / meter kg/s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mass flow rate: 38.14 kg/s
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">specific_impulse</span> <span class="o">=</span> <span class="n">c_star</span> <span class="o">*</span> <span class="n">thrust_coeff</span> <span class="o">/</span> <span class="n">constants</span><span class="o">.</span><span class="n">g</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Specific impulse: </span><span class="si">{</span><span class="n">specific_impulse</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> s&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">specific_impulse</span> <span class="o">=</span> <span class="n">c_star</span> <span class="o">*</span> <span class="n">thrust_coeff</span> <span class="o">/</span> <span class="n">Q_</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;m/s^2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Specific impulse: </span><span class="si">{</span><span class="n">specific_impulse</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .1f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Specific impulse: 267.3 meter / second s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Specific impulse: 267.3 s
 </pre></div>
 </div>
 </div>
@@ -757,12 +757,12 @@ Exit diameter: 1.334 newton ** 0.5 / bar ** 0.0833333 / pascal ** 0.416667 m
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">propellant_mass</span> <span class="o">=</span> <span class="n">mass_flow_rate</span> <span class="o">*</span> <span class="n">burn_time</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Propellant mass: </span><span class="si">{</span><span class="n">propellant_mass</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> kg&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Propellant mass: </span><span class="si">{</span><span class="n">propellant_mass</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kg&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .1f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Propellant mass: 190.7 newton * second ** 2 / meter kg
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Propellant mass: 190.7 kg
 </pre></div>
 </div>
 </div>
@@ -771,15 +771,15 @@ Exit diameter: 1.334 newton ** 0.5 / bar ** 0.0833333 / pascal ** 0.416667 m
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># constant.R is given in J/(K mol), need J/(K kmol)</span>
 <span class="n">chamber_temperature</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">c_star</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="p">(</span><span class="n">MW</span> <span class="o">/</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">R</span><span class="o">*</span><span class="mf">1e3</span><span class="p">))</span> <span class="o">*</span> 
+    <span class="n">c_star</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="p">(</span><span class="n">MW</span> <span class="o">/</span> <span class="n">Q_</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="s1">&#39;J/(K*mol)&#39;</span><span class="p">))</span> <span class="o">*</span> 
     <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">gamma</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
     <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Chamber temperature: </span><span class="si">{</span><span class="n">chamber_temperature</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> K&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Chamber temperature: </span><span class="si">{</span><span class="n">chamber_temperature</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;K&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .1f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chamber temperature: 2845.4 kilogram * meter ** 2 / kilomole / second ** 2 K
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chamber temperature: 2845.4 K
 </pre></div>
 </div>
 </div>
@@ -788,45 +788,15 @@ Exit diameter: 1.334 newton ** 0.5 / bar ** 0.0833333 / pascal ** 0.416667 m
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Thrust at sea level</span>
 <span class="n">thrust_coeff_sea_level</span> <span class="o">=</span> <span class="n">thrust_coeff</span> <span class="o">+</span> <span class="n">area_ratio</span> <span class="o">*</span> <span class="p">(</span>
-    <span class="mi">1</span><span class="o">/</span><span class="n">pressure_ratio</span> <span class="o">-</span> <span class="mi">101325</span><span class="o">/</span><span class="n">chamber_pressure</span>
+    <span class="mi">1</span><span class="o">/</span><span class="n">pressure_ratio</span> <span class="o">-</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;atm&#39;</span><span class="p">)</span><span class="o">/</span><span class="n">chamber_pressure</span>
     <span class="p">)</span>
 <span class="n">thrust_sea_level</span> <span class="o">=</span> <span class="n">thrust_coeff_sea_level</span> <span class="o">*</span> <span class="n">chamber_pressure</span> <span class="o">*</span> <span class="n">throat_area</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust at sea level: </span><span class="si">{</span><span class="n">thrust_sea_level</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> kN&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust at sea level: </span><span class="si">{</span><span class="n">thrust_sea_level</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kN&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .1f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">DimensionalityError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">18</span><span class="o">-</span><span class="mi">0</span><span class="n">bc5be192ec2</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Thrust at sea level</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">thrust_coeff_sea_level</span> <span class="o">=</span> <span class="n">thrust_coeff</span> <span class="o">+</span> <span class="n">area_ratio</span> <span class="o">*</span> <span class="p">(</span>
-<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="mi">1</span><span class="o">/</span><span class="n">pressure_ratio</span> <span class="o">-</span> <span class="mi">101325</span><span class="o">/</span><span class="n">chamber_pressure</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">thrust_sea_level</span> <span class="o">=</span> <span class="n">thrust_coeff_sea_level</span> <span class="o">*</span> <span class="n">chamber_pressure</span> <span class="o">*</span> <span class="n">throat_area</span>
-
-<span class="nn">/usr/share/miniconda/envs/rocket-env/lib/python3.8/site-packages/pint/quantity.py</span> in <span class="ni">__sub__</span><span class="nt">(self, other)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1088</span> 
-<span class="g g-Whitespace">   </span><span class="mi">1089</span>     <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1090</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_sub</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">sub</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1091</span> 
-<span class="g g-Whitespace">   </span><span class="mi">1092</span>     <span class="k">def</span> <span class="fm">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-
-<span class="nn">/usr/share/miniconda/envs/rocket-env/lib/python3.8/site-packages/pint/quantity.py</span> in <span class="ni">wrapped</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">113</span>         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">other</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
-<span class="g g-Whitespace">    </span><span class="mi">114</span>             <span class="k">return</span> <span class="bp">NotImplemented</span>
-<span class="ne">--&gt; </span><span class="mi">115</span>         <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">116</span> 
-<span class="g g-Whitespace">    </span><span class="mi">117</span>     <span class="k">return</span> <span class="n">wrapped</span>
-
-<span class="nn">/usr/share/miniconda/envs/rocket-env/lib/python3.8/site-packages/pint/quantity.py</span> in <span class="ni">_add_sub</span><span class="nt">(self, other, op)</span>
-<span class="g g-Whitespace">    </span><span class="mi">987</span> 
-<span class="g g-Whitespace">    </span><span class="mi">988</span>         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensionality</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">989</span>             <span class="k">raise</span> <span class="n">DimensionalityError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">990</span>                 <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_units</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">dimensionality</span>
-<span class="g g-Whitespace">    </span><span class="mi">991</span>             <span class="p">)</span>
-
-<span class="ne">DimensionalityError</span>: Cannot convert from &#39;pascal / bar&#39; (dimensionless) to &#39;1 / bar&#39; ([length] * [time] ** 2 / [mass])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Thrust at sea level: 84.7 kN
 </pre></div>
 </div>
 </div>
