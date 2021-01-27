@@ -11,6 +11,11 @@
     - file: fundamentals/staging
     - file: fundamentals/ideal-rocket
 
+- part: Thermochemistry
+  chapters:
+    - file: thermochemistry/thermochemistry
+    - file: thermochemistry/cea_cantera
+
 - part: Reference
   chapters:
   - file: zbibliography
