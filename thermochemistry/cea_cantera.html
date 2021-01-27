@@ -54,8 +54,11 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bibliography" href="../zbibliography.html" />
+    <link rel="prev" title="Thermochemistry" href="thermochemistry.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -111,18 +114,35 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="thrust-rocket-equation.html">
+  <a class="reference internal" href="../fundamentals/thrust-rocket-equation.html">
    Thrust and the rocket equation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="staging.html">
+  <a class="reference internal" href="../fundamentals/staging.html">
    Rocket staging
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="ideal-rocket.html">
+  <a class="reference internal" href="../fundamentals/ideal-rocket.html">
    Ideal rocket analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Thermochemistry
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="thermochemistry.html">
+   Thermochemistry
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Implementing CEA calculations using Cantera
   </a>
  </li>
 </ul>
@@ -182,7 +202,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/fundamentals/cea_cantera.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/thermochemistry/cea_cantera.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -220,7 +240,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/kyleniemeyer/rocket-propulsion/newbackend?urlpath=tree/book/fundamentals/cea_cantera.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/kyleniemeyer/rocket-propulsion/newbackend?urlpath=tree/book/thermochemistry/cea_cantera.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../_static/images/logo_binder.svg"
@@ -250,6 +270,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#adiabatic-combustion">
    Adiabatic combustion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rocket-calculations">
+   Rocket calculations
   </a>
  </li>
 </ul>
@@ -953,7 +978,11 @@ Speed of sound =  1587.8 m/s
 </div>
 </div>
 </div>
-<p>🎉 Success! We get an equilibrium temperature of 3597.5 K, which is just 0.036% off the value calculated by CEA.</p>
+<p>🎉 Success! We get an equilibrium temperature of 3597.5 K, which is just 0.036% off the value calculated by CEA.
+Similarly, the ratios of specific heats match within 0.009%, and the speed of sounds within 0.019%.</p>
+</div>
+<div class="section" id="rocket-calculations">
+<h2>Rocket calculations<a class="headerlink" href="#rocket-calculations" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -970,7 +999,7 @@ Speed of sound =  1587.8 m/s
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./fundamentals"
+            path: "./thermochemistry"
         },
         predefinedOutput: true
     }
@@ -985,6 +1014,8 @@ Speed of sound =  1587.8 m/s
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="thermochemistry.html" title="previous page">Thermochemistry</a>
+    <a class='right-next' id="next-link" href="../zbibliography.html" title="next page">Bibliography</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
