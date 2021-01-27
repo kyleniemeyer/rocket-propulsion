@@ -444,6 +444,15 @@ C_p,equil = 11090.553117196094
 <span class="sd">    Based on shifting equilibrium for mixtures.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
+    <span class="n">tot_moles</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">gas</span><span class="o">.</span><span class="n">mean_molecular_weight</span>
+    <span class="n">moles</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">X</span> <span class="o">*</span> <span class="n">tot_moles</span>
+    
+    <span class="c1"># construct matrix of elemental stoichiometric coefficients</span>
+    <span class="n">stoich_coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_species</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">element_names</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">sp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">species_names</span><span class="p">):</span>
+            <span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
+    
     <span class="n">spec_heat_p</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">dpi_dlogT_P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> 
                 <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="p">)</span> 
@@ -504,30 +513,10 @@ C_p,equil = 11090.553117196094
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">6</span><span class="o">-</span><span class="n">a96f7bee0472</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> 
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">gamma_s</span> <span class="o">=</span> <span class="n">get_thermo_properties</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">gas</span><span class="p">,</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="p">)</span>
-
-<span class="nn">&lt;ipython-input-4-a732809e6daa&gt;</span> in <span class="ni">get_thermo_properties</span><span class="nt">(gas, dpi_dlogT_P, dlogn_dlogT_P, dlogn_dlogP_T)</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span> 
-<span class="g g-Whitespace">     </span><span class="mi">76</span>     <span class="n">spec_heat_p</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="p">(</span>
-<span class="ne">---&gt; </span><span class="mi">77</span>         <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">dpi_dlogT_P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> 
-<span class="g g-Whitespace">     </span><span class="mi">78</span>                 <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="p">)</span>
-<span class="nn">     79                 for i</span> in <span class="ni">range</span><span class="nt">(gas.n_elements)</span>
-
-<span class="nn">&lt;ipython-input-4-a732809e6daa&gt;</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
-<span class="g g-Whitespace">     </span><span class="mi">76</span>     <span class="n">spec_heat_p</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">77</span>         <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">dpi_dlogT_P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> 
-<span class="ne">---&gt; </span><span class="mi">78</span>                 <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="p">)</span>
-<span class="nn">     79                 for i</span> in <span class="ni">range</span><span class="nt">(gas.n_elements)</span>
-<span class="g g-Whitespace">     </span><span class="mi">80</span>                 <span class="p">])</span> <span class="o">+</span>
-
-<span class="ne">NameError</span>: name &#39;stoich_coeffs&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cp =  11091.25
+(d log V/d log P)_T = -1.0399
+(d log V/d log T)_P =  1.4713
+gamma_s =  1.2551
 </pre></div>
 </div>
 </div>
@@ -607,9 +596,7 @@ C_p,equil = 11090.553117196094
 <span class="n">gas</span><span class="o">.</span><span class="n">TPX</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure</span><span class="p">),</span> <span class="s1">&#39;N2H4:1.0&#39;</span>
 
 <span class="c1"># set the gas to equilibrium at its current T and P</span>
-<span class="n">rtol</span><span class="o">=</span><span class="mf">1.0e-6</span>
-<span class="n">maxiter</span><span class="o">=</span><span class="mi">5000</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;TP&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">)</span>
+<span class="n">gas</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;TP&#39;</span><span class="p">)</span>
 
 <span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas</span><span class="p">)</span>
 
@@ -632,11 +619,11 @@ C_p,equil = 11090.553117196094
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cp =  11110.05
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cp =  11104.47
 (d log V/d log P)_T = -1.0400
 (d log V/d log T)_P =  1.4722
-gamma_s =  1.2547
-Speed of sound =  2795.6 m/s
+gamma_s =  1.2549
+Speed of sound =  2795.8 m/s
 
        temperature   5000 K
           pressure   3.4474e+05 Pa
@@ -667,28 +654,104 @@ Speed of sound =  2795.6 m/s
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;liquidvapor.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;hydrogen&#39;</span><span class="p">)</span>
-<span class="n">o2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;liquidvapor.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;oxygen&#39;</span><span class="p">)</span>
-<span class="n">gas3</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;h2o2.yaml&#39;</span><span class="p">)</span>
-<span class="n">mix</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Mixture</span><span class="p">([(</span><span class="n">h2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="n">o2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="n">gas3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">o_f_ratio</span> <span class="o">=</span> <span class="mf">6.0</span>
+
+<span class="n">h2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;test.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_hydrogen&#39;</span><span class="p">)</span>
+<span class="n">h2</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="mf">20.270</span><span class="p">,</span> <span class="mi">20477430</span>
+
+<span class="n">o2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;test.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_oxygen&#39;</span><span class="p">)</span>
+<span class="n">o2</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="mf">90.170</span><span class="p">,</span> <span class="mi">20477430</span>
+
+<span class="n">molar_ratio</span> <span class="o">=</span> <span class="n">o_f_ratio</span> <span class="o">/</span> <span class="p">(</span><span class="n">o2</span><span class="o">.</span><span class="n">mean_molecular_weight</span> <span class="o">/</span> <span class="n">h2</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
+<span class="n">moles_ox</span> <span class="o">=</span> <span class="n">molar_ratio</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">molar_ratio</span><span class="p">)</span>
+<span class="n">moles_f</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">moles_ox</span>
+
+<span class="n">gas3</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;nasa_h2o2.cti&#39;</span><span class="p">,</span> <span class="s1">&#39;gas&#39;</span><span class="p">)</span>
+
+<span class="c1">#full_species = {S.name: S for S in ct.Species.listFromFile(&#39;h2o2.yaml&#39;)}</span>
+<span class="c1">#species = [full_species[S] for S in full_species if S != &#39;AR&#39;]</span>
+<span class="c1">#gas3 = ct.Solution(thermo=&#39;IdealGas&#39;, species=species)</span>
+
+<span class="n">mix</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Mixture</span><span class="p">([(</span><span class="n">h2</span><span class="p">,</span> <span class="n">moles_f</span><span class="p">),</span> <span class="p">(</span><span class="n">o2</span><span class="p">,</span> <span class="n">moles_ox</span><span class="p">),</span> <span class="p">(</span><span class="n">gas3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+<span class="n">mix</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;HP&#39;</span><span class="p">)</span>
+
+<span class="n">gas3</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">CanteraError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">122</span><span class="o">-</span><span class="mi">1</span><span class="n">bf703f46824</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">o2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;liquidvapor.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;oxygen&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">gas3</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;h2o2.yaml&#39;</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">mix</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Mixture</span><span class="p">([(</span><span class="n">h2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="n">o2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="n">gas3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">1</span><span class="n">cfc9e96b34d</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">o_f_ratio</span> <span class="o">=</span> <span class="mf">6.0</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> 
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">h2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;test.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_hydrogen&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">h2</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="mf">20.270</span><span class="p">,</span> <span class="mi">20477430</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
 
-<span class="nn">interfaces/cython/cantera/mixture.pyx</span> in <span class="ni">cantera._cantera.Mixture.__cinit__</span><span class="nt">()</span>
+<span class="nn">interfaces/cython/cantera/base.pyx</span> in <span class="ni">cantera._cantera._SolutionBase.__cinit__</span><span class="nt">()</span>
+
+<span class="nn">interfaces/cython/cantera/base.pyx</span> in <span class="ni">cantera._cantera._SolutionBase._init_yaml</span><span class="nt">()</span>
 
 <span class="ne">CanteraError</span>: 
 <span class="o">***********************************************************************</span>
-<span class="n">CanteraError</span> <span class="n">thrown</span> <span class="n">by</span> <span class="n">MultiPhase</span><span class="p">::</span><span class="n">addPhase</span><span class="p">:</span>
-<span class="n">Phase</span> <span class="s1">&#39;hydrogen&#39;&#39; is not compatible with MultiPhase equilibrium solver</span>
+<span class="n">CanteraError</span> <span class="n">thrown</span> <span class="n">by</span> <span class="n">Application</span><span class="p">::</span><span class="n">findInputFile</span><span class="p">:</span>
+
+<span class="n">Input</span> <span class="n">file</span> <span class="n">test</span><span class="o">.</span><span class="n">yaml</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">directories</span> 
+<span class="s1">&#39;.&#39;</span><span class="p">,</span> 
+<span class="s1">&#39;/usr/share/miniconda/envs/rocket-env/lib/python3.8/site-packages/cantera/data&#39;</span><span class="p">,</span> 
+<span class="s1">&#39;/usr/share/miniconda/envs/rocket-env/share/cantera/data&#39;</span>
+
+<span class="n">To</span> <span class="n">fix</span> <span class="n">this</span> <span class="n">problem</span><span class="p">,</span> <span class="n">either</span><span class="p">:</span>
+    <span class="n">a</span><span class="p">)</span> <span class="n">move</span> <span class="n">the</span> <span class="n">missing</span> <span class="n">files</span> <span class="n">into</span> <span class="n">the</span> <span class="n">local</span> <span class="n">directory</span><span class="p">;</span>
+    <span class="n">b</span><span class="p">)</span> <span class="n">define</span> <span class="n">environment</span> <span class="n">variable</span> <span class="n">CANTERA_DATA</span> <span class="n">to</span>
+         <span class="n">point</span> <span class="n">to</span> <span class="n">the</span> <span class="n">directory</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">file</span><span class="o">.</span>
 <span class="o">***********************************************************************</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">gas3</span><span class="o">.</span><span class="n">species_names</span><span class="p">)</span>
+<span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas3</span><span class="p">)</span>
+
+<span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">gamma_s</span> <span class="o">=</span> <span class="n">get_thermo_properties</span><span class="p">(</span>
+    <span class="n">gas3</span><span class="p">,</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cp = </span><span class="si">{</span><span class="n">cp</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(d log V/d log P)_T = </span><span class="si">{</span><span class="n">dlogV_dlogP_T</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(d log V/d log T)_P = </span><span class="si">{</span><span class="n">dlogV_dlogT_P</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gamma_s = </span><span class="si">{</span><span class="n">gamma_s</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">speed_sound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="n">gas3</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">gamma_s</span> <span class="o">/</span> <span class="n">gas3</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Speed of sound = </span><span class="si">{</span><span class="n">speed_sound</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> m/s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;H&#39;, &#39;HO2&#39;, &#39;H2&#39;, &#39;H2O&#39;, &#39;H2O2&#39;, &#39;O&#39;, &#39;OH&#39;, &#39;O2&#39;, &#39;O3&#39;]
+Cp =  7341.98
+(d log V/d log P)_T = -1.0191
+(d log V/d log T)_P =  1.3315
+gamma_s =  1.1473
+Speed of sound =  1587.6 m/s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">P</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">2.0477e7</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>204.77 bar
 </pre></div>
 </div>
 </div>

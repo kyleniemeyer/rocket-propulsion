@@ -17,43 +17,71 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply['content'])
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-derivs = get_thermo_derivatives(gas)
+o_f_ratio = 6.0
 
-dlogV_dlogT_P, dlogV_dlogP_T, cp, gamma_s = get_thermo_properties(
-    gas, derivs[0], derivs[1], derivs[2]
-    )
+h2 = ct.Solution('test.yaml', 'liquid_hydrogen')
+h2.TP = 20.270, 20477430
 
-print(f'Cp = {cp: .2f}')
+o2 = ct.Solution('test.yaml', 'liquid_oxygen')
+o2.TP = 90.170, 20477430
 
-print(f'(d log V/d log P)_T = {dlogV_dlogP_T: .4f}')
-print(f'(d log V/d log T)_P = {dlogV_dlogT_P: .4f}')
+molar_ratio = o_f_ratio / (o2.mean_molecular_weight / h2.mean_molecular_weight)
+moles_ox = molar_ratio / (1 + molar_ratio)
+moles_f = 1 - moles_ox
 
-print(f'gamma_s = {gamma_s: .4f}')
+gas3 = ct.Solution('nasa_h2o2.cti', 'gas')
+
+#full_species = {S.name: S for S in ct.Species.listFromFile('h2o2.yaml')}
+#species = [full_species[S] for S in full_species if S != 'AR']
+#gas3 = ct.Solution(thermo='IdealGas', species=species)
+
+mix = ct.Mixture([(h2, moles_f), (o2, moles_ox), (gas3, 0)])
+mix.equilibrate('HP')
+
+gas3()
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mNameError[0m                                 Traceback (most recent call last)
-[0;32m<ipython-input-6-a96f7bee0472>[0m in [0;36m<module>[0;34m[0m
-[1;32m      1[0m [0mderivs[0m [0;34m=[0m [0mget_thermo_derivatives[0m[0;34m([0m[0mgas[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;31mCanteraError[0m                              Traceback (most recent call last)
+[0;32m<ipython-input-10-1cfc9e96b34d>[0m in [0;36m<module>[0;34m[0m
+[1;32m      1[0m [0mo_f_ratio[0m [0;34m=[0m [0;36m6.0[0m[0;34m[0m[0;34m[0m[0m
 [1;32m      2[0m [0;34m[0m[0m
-[0;32m----> 3[0;31m dlogV_dlogT_P, dlogV_dlogP_T, cp, gamma_s = get_thermo_properties(
-[0m[1;32m      4[0m     [0mgas[0m[0;34m,[0m [0mderivs[0m[0;34m[[0m[0;36m0[0m[0;34m][0m[0;34m,[0m [0mderivs[0m[0;34m[[0m[0;36m1[0m[0;34m][0m[0;34m,[0m [0mderivs[0m[0;34m[[0m[0;36m2[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
-[1;32m      5[0m     )
+[0;32m----> 3[0;31m [0mh2[0m [0;34m=[0m [0mct[0m[0;34m.[0m[0mSolution[0m[0;34m([0m[0;34m'test.yaml'[0m[0;34m,[0m [0;34m'liquid_hydrogen'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      4[0m [0mh2[0m[0;34m.[0m[0mTP[0m [0;34m=[0m [0;36m20.270[0m[0;34m,[0m [0;36m20477430[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      5[0m [0;34m[0m[0m
 
-[0;32m<ipython-input-4-a732809e6daa>[0m in [0;36mget_thermo_properties[0;34m(gas, dpi_dlogT_P, dlogn_dlogT_P, dlogn_dlogP_T)[0m
-[1;32m     75[0m [0;34m[0m[0m
-[1;32m     76[0m     spec_heat_p = ct.gas_constant * (
-[0;32m---> 77[0;31m         np.sum([dpi_dlogT_P[i] * 
-[0m[1;32m     78[0m                 [0mnp[0m[0;34m.[0m[0msum[0m[0;34m([0m[0mstoich_coeffs[0m[0;34m[[0m[0mi[0m[0;34m,[0m[0;34m:[0m[0;34m][0m [0;34m*[0m [0mmoles[0m [0;34m*[0m [0mgas[0m[0;34m.[0m[0mstandard_enthalpies_RT[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m     79[0m                 [0;32mfor[0m [0mi[0m [0;32min[0m [0mrange[0m[0;34m([0m[0mgas[0m[0;34m.[0m[0mn_elements[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32minterfaces/cython/cantera/base.pyx[0m in [0;36mcantera._cantera._SolutionBase.__cinit__[0;34m()[0m
 
-[0;32m<ipython-input-4-a732809e6daa>[0m in [0;36m<listcomp>[0;34m(.0)[0m
-[1;32m     76[0m     spec_heat_p = ct.gas_constant * (
-[1;32m     77[0m         np.sum([dpi_dlogT_P[i] * 
-[0;32m---> 78[0;31m                 [0mnp[0m[0;34m.[0m[0msum[0m[0;34m([0m[0mstoich_coeffs[0m[0;34m[[0m[0mi[0m[0;34m,[0m[0;34m:[0m[0;34m][0m [0;34m*[0m [0mmoles[0m [0;34m*[0m [0mgas[0m[0;34m.[0m[0mstandard_enthalpies_RT[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m     79[0m                 [0;32mfor[0m [0mi[0m [0;32min[0m [0mrange[0m[0;34m([0m[0mgas[0m[0;34m.[0m[0mn_elements[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m     80[0m                 ]) +
+[0;32minterfaces/cython/cantera/base.pyx[0m in [0;36mcantera._cantera._SolutionBase._init_yaml[0;34m()[0m
 
-[0;31mNameError[0m: name 'stoich_coeffs' is not defined
-NameError: name 'stoich_coeffs' is not defined
+[0;31mCanteraError[0m: 
+***********************************************************************
+CanteraError thrown by Application::findInputFile:
+
+Input file test.yaml not found in directories 
+'.', 
+'/usr/share/miniconda/envs/rocket-env/lib/python3.8/site-packages/cantera/data', 
+'/usr/share/miniconda/envs/rocket-env/share/cantera/data'
+
+To fix this problem, either:
+    a) move the missing files into the local directory;
+    b) define environment variable CANTERA_DATA to
+         point to the directory containing the file.
+***********************************************************************
+
+CanteraError: 
+***********************************************************************
+CanteraError thrown by Application::findInputFile:
+
+Input file test.yaml not found in directories 
+'.', 
+'/usr/share/miniconda/envs/rocket-env/lib/python3.8/site-packages/cantera/data', 
+'/usr/share/miniconda/envs/rocket-env/share/cantera/data'
+
+To fix this problem, either:
+    a) move the missing files into the local directory;
+    b) define environment variable CANTERA_DATA to
+         point to the directory containing the file.
+***********************************************************************
+
 
