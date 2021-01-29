@@ -276,6 +276,23 @@
   <a class="reference internal nav-link" href="#rocket-calculations">
    Rocket calculations
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#c-star">
+     C-star
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#throat-conditions">
+     Throat conditions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exit-conditions">
+     Exit conditions
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -897,13 +914,13 @@ Then, create a <code class="docutils literal notranslate"><span class="pre">Mixt
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">o_f_ratio</span> <span class="o">=</span> <span class="mf">6.0</span>
 <span class="n">temperature_h2</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">20.270</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
 <span class="n">temperature_o2</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">90.170</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
-<span class="n">pressure</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span>
+<span class="n">pressure_chamber</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span>
 
 <span class="n">h2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="n">h2o2_filename</span><span class="p">,</span> <span class="s1">&#39;liquid_hydrogen&#39;</span><span class="p">)</span>
-<span class="n">h2</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature_h2</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
+<span class="n">h2</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature_h2</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure_chamber</span><span class="p">)</span>
 
 <span class="n">o2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="n">h2o2_filename</span><span class="p">,</span> <span class="s1">&#39;liquid_oxygen&#39;</span><span class="p">)</span>
-<span class="n">o2</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature_o2</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
+<span class="n">o2</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature_o2</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure_chamber</span><span class="p">)</span>
 
 <span class="n">molar_ratio</span> <span class="o">=</span> <span class="n">o_f_ratio</span> <span class="o">/</span> <span class="p">(</span><span class="n">o2</span><span class="o">.</span><span class="n">mean_molecular_weight</span> <span class="o">/</span> <span class="n">h2</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
 <span class="n">moles_ox</span> <span class="o">=</span> <span class="n">molar_ratio</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">molar_ratio</span><span class="p">)</span>
@@ -983,6 +1000,456 @@ Similarly, the ratios of specific heats match within 0.009%, and the speed of so
 </div>
 <div class="section" id="rocket-calculations">
 <h2>Rocket calculations<a class="headerlink" href="#rocket-calculations" title="Permalink to this headline">¶</a></h2>
+<p>CEA also calculates performance quantities specific to rockets, such as the
+effective velocity (C-star, <span class="math notranslate nohighlight">\(c^*\)</span>), thrust coefficient (<span class="math notranslate nohighlight">\(C_F\)</span>), and specific
+impulse (<span class="math notranslate nohighlight">\(I_{\text{sp}}\)</span>).</p>
+<p>For the above example, but choosing the <code class="docutils literal notranslate"><span class="pre">rocket</span></code> problem and specifying a nozzle area ratio
+of 68.8, CEA provides this output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*******************************************************************************</span>
+
+         <span class="n">NASA</span><span class="o">-</span><span class="n">GLENN</span> <span class="n">CHEMICAL</span> <span class="n">EQUILIBRIUM</span> <span class="n">PROGRAM</span> <span class="n">CEA2</span><span class="p">,</span> <span class="n">FEBRUARY</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2004</span>
+                   <span class="n">BY</span>  <span class="n">BONNIE</span> <span class="n">MCBRIDE</span> <span class="n">AND</span> <span class="n">SANFORD</span> <span class="n">GORDON</span>
+      <span class="n">REFS</span><span class="p">:</span> <span class="n">NASA</span> <span class="n">RP</span><span class="o">-</span><span class="mi">1311</span><span class="p">,</span> <span class="n">PART</span> <span class="n">I</span><span class="p">,</span> <span class="mi">1994</span> <span class="n">AND</span> <span class="n">NASA</span> <span class="n">RP</span><span class="o">-</span><span class="mi">1311</span><span class="p">,</span> <span class="n">PART</span> <span class="n">II</span><span class="p">,</span> <span class="mi">1996</span>
+
+ <span class="o">*******************************************************************************</span>
+
+ <span class="c1"># Problem Type: &quot;Rocket&quot; (Infinite Area Combustor)</span>
+  
+ <span class="n">prob</span> <span class="n">case</span><span class="o">=</span><span class="n">_______________3446</span> <span class="n">ro</span> <span class="n">equilibrium</span>
+  
+ <span class="c1"># Pressure (1 value):</span>
+ <span class="n">p</span><span class="p">,</span><span class="n">psia</span><span class="o">=</span> <span class="mi">3000</span>
+ <span class="c1"># Supersonic Area Ratio (1 value):</span>
+ <span class="n">supar</span><span class="o">=</span> <span class="mf">68.8</span>
+  
+ <span class="c1"># Oxidizer/Fuel Wt. ratio (1 value):</span>
+ <span class="n">o</span><span class="o">/</span><span class="n">f</span><span class="o">=</span> <span class="mf">6.0</span>
+  
+ <span class="c1"># You selected the following fuels and oxidizers:</span>
+ <span class="n">reac</span>
+ <span class="n">fuel</span> <span class="n">H2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>             <span class="n">wt</span><span class="o">%=</span><span class="mf">100.0000</span>
+ <span class="n">oxid</span> <span class="n">O2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>             <span class="n">wt</span><span class="o">%=</span><span class="mf">100.0000</span>
+  
+ <span class="n">output</span> <span class="n">short</span>
+ <span class="n">output</span> <span class="n">siunits</span>
+ <span class="n">end</span>
+
+              <span class="n">THEORETICAL</span> <span class="n">ROCKET</span> <span class="n">PERFORMANCE</span> <span class="n">ASSUMING</span> <span class="n">EQUILIBRIUM</span>
+
+           <span class="n">COMPOSITION</span> <span class="n">DURING</span> <span class="n">EXPANSION</span> <span class="n">FROM</span> <span class="n">INFINITE</span> <span class="n">AREA</span> <span class="n">COMBUSTOR</span>
+
+ <span class="n">Pin</span> <span class="o">=</span>  <span class="mf">3000.0</span> <span class="n">PSIA</span>
+ <span class="n">CASE</span> <span class="o">=</span> <span class="n">_______________</span>
+
+             <span class="n">REACTANT</span>                    <span class="n">WT</span> <span class="n">FRACTION</span>      <span class="n">ENERGY</span>      <span class="n">TEMP</span>
+                                          <span class="p">(</span><span class="n">SEE</span> <span class="n">NOTE</span><span class="p">)</span>     <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span><span class="o">-</span><span class="n">MOL</span>      <span class="n">K</span>  
+ <span class="n">FUEL</span>        <span class="n">H2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>                        <span class="mf">1.0000000</span>     <span class="o">-</span><span class="mf">9012.000</span>     <span class="mf">20.270</span>
+ <span class="n">OXIDANT</span>     <span class="n">O2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>                        <span class="mf">1.0000000</span>    <span class="o">-</span><span class="mf">12979.000</span>     <span class="mf">90.170</span>
+
+ <span class="n">O</span><span class="o">/</span><span class="n">F</span><span class="o">=</span>    <span class="mf">6.00000</span>  <span class="o">%</span><span class="n">FUEL</span><span class="o">=</span> <span class="mf">14.285714</span>  <span class="n">R</span><span class="p">,</span><span class="n">EQ</span><span class="o">.</span><span class="n">RATIO</span><span class="o">=</span> <span class="mf">1.322780</span>  <span class="n">PHI</span><span class="p">,</span><span class="n">EQ</span><span class="o">.</span><span class="n">RATIO</span><span class="o">=</span> <span class="mf">1.322780</span>
+
+                 <span class="n">CHAMBER</span>   <span class="n">THROAT</span>     <span class="n">EXIT</span>
+ <span class="n">Pinf</span><span class="o">/</span><span class="n">P</span>            <span class="mf">1.0000</span>   <span class="mf">1.7403</span>   <span class="mf">961.12</span>
+ <span class="n">P</span><span class="p">,</span> <span class="n">BAR</span>            <span class="mf">206.84</span>   <span class="mf">118.85</span>  <span class="mf">0.21521</span>
+ <span class="n">T</span><span class="p">,</span> <span class="n">K</span>             <span class="mf">3598.76</span>  <span class="mf">3381.67</span>  <span class="mf">1233.84</span>
+ <span class="n">RHO</span><span class="p">,</span> <span class="n">KG</span><span class="o">/</span><span class="n">CU</span> <span class="n">M</span>    <span class="mf">9.4113</span> <span class="mi">0</span> <span class="mf">5.8080</span> <span class="mi">0</span> <span class="mf">2.9602</span><span class="o">-</span><span class="mi">2</span>
+ <span class="n">H</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span>         <span class="o">-</span><span class="mf">986.31</span> <span class="o">-</span><span class="mf">2161.66</span> <span class="o">-</span><span class="mf">10544.8</span>
+ <span class="n">U</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span>        <span class="o">-</span><span class="mf">3184.12</span> <span class="o">-</span><span class="mf">4208.00</span> <span class="o">-</span><span class="mf">11271.8</span>
+ <span class="n">G</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span>        <span class="o">-</span><span class="mf">62768.7</span> <span class="o">-</span><span class="mf">60217.2</span> <span class="o">-</span><span class="mf">31727.0</span>
+ <span class="n">S</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="p">(</span><span class="n">KG</span><span class="p">)(</span><span class="n">K</span><span class="p">)</span>    <span class="mf">17.1677</span>  <span class="mf">17.1677</span>  <span class="mf">17.1677</span>
+
+ <span class="n">M</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>          <span class="mf">13.614</span>   <span class="mf">13.740</span>   <span class="mf">14.111</span>
+ <span class="p">(</span><span class="n">dLV</span><span class="o">/</span><span class="n">dLP</span><span class="p">)</span><span class="n">t</span>      <span class="o">-</span><span class="mf">1.01897</span> <span class="o">-</span><span class="mf">1.01412</span> <span class="o">-</span><span class="mf">1.00000</span>
+ <span class="p">(</span><span class="n">dLV</span><span class="o">/</span><span class="n">dLT</span><span class="p">)</span><span class="n">p</span>        <span class="mf">1.3291</span>   <span class="mf">1.2605</span>   <span class="mf">1.0000</span>
+ <span class="n">Cp</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="p">(</span><span class="n">KG</span><span class="p">)(</span><span class="n">K</span><span class="p">)</span>    <span class="mf">7.3140</span>   <span class="mf">6.6953</span>   <span class="mf">2.9097</span>
+ <span class="n">GAMMAs</span>            <span class="mf">1.1475</span>   <span class="mf">1.1487</span>   <span class="mf">1.2539</span>
+ <span class="n">SON</span> <span class="n">VEL</span><span class="p">,</span><span class="n">M</span><span class="o">/</span><span class="n">SEC</span>     <span class="mf">1588.1</span>   <span class="mf">1533.2</span>    <span class="mf">954.8</span>
+ <span class="n">MACH</span> <span class="n">NUMBER</span>        <span class="mf">0.000</span>    <span class="mf">1.000</span>    <span class="mf">4.579</span>
+
+ <span class="n">PERFORMANCE</span> <span class="n">PARAMETERS</span>
+
+ <span class="n">Ae</span><span class="o">/</span><span class="n">At</span>                      <span class="mf">1.0000</span>   <span class="mf">68.800</span>
+ <span class="n">CSTAR</span><span class="p">,</span> <span class="n">M</span><span class="o">/</span><span class="n">SEC</span>               <span class="mf">2322.8</span>   <span class="mf">2322.8</span>
+ <span class="n">CF</span>                         <span class="mf">0.6601</span>   <span class="mf">1.8823</span>
+ <span class="n">Ivac</span><span class="p">,</span> <span class="n">M</span><span class="o">/</span><span class="n">SEC</span>                <span class="mf">2867.9</span>   <span class="mf">4538.6</span>
+ <span class="n">Isp</span><span class="p">,</span> <span class="n">M</span><span class="o">/</span><span class="n">SEC</span>                 <span class="mf">1533.2</span>   <span class="mf">4372.3</span>
+
+
+ <span class="n">MOLE</span> <span class="n">FRACTIONS</span>
+
+ <span class="o">*</span><span class="n">H</span>               <span class="mf">0.02543</span>  <span class="mf">0.02034</span>  <span class="mf">0.00000</span>
+ <span class="n">HO2</span>              <span class="mf">0.00003</span>  <span class="mf">0.00002</span>  <span class="mf">0.00000</span>
+ <span class="o">*</span><span class="n">H2</span>              <span class="mf">0.24740</span>  <span class="mf">0.24494</span>  <span class="mf">0.24402</span>
+ <span class="n">H2O</span>              <span class="mf">0.68635</span>  <span class="mf">0.70506</span>  <span class="mf">0.75598</span>
+ <span class="n">H2O2</span>             <span class="mf">0.00002</span>  <span class="mf">0.00001</span>  <span class="mf">0.00000</span>
+ <span class="o">*</span><span class="n">O</span>               <span class="mf">0.00202</span>  <span class="mf">0.00123</span>  <span class="mf">0.00000</span>
+ <span class="o">*</span><span class="n">OH</span>              <span class="mf">0.03659</span>  <span class="mf">0.02704</span>  <span class="mf">0.00000</span>
+ <span class="o">*</span><span class="n">O2</span>              <span class="mf">0.00215</span>  <span class="mf">0.00137</span>  <span class="mf">0.00000</span>
+
+  <span class="o">*</span> <span class="n">THERMODYNAMIC</span> <span class="n">PROPERTIES</span> <span class="n">FITTED</span> <span class="n">TO</span> <span class="mf">20000.</span><span class="n">K</span>
+
+ <span class="n">NOTE</span><span class="o">.</span> <span class="n">WEIGHT</span> <span class="n">FRACTION</span> <span class="n">OF</span> <span class="n">FUEL</span> <span class="n">IN</span> <span class="n">TOTAL</span> <span class="n">FUELS</span> <span class="n">AND</span> <span class="n">OF</span> <span class="n">OXIDANT</span> <span class="n">IN</span> <span class="n">TOTAL</span> <span class="n">OXIDANTS</span>
+</pre></div>
+</div>
+<p>The key properties include:</p>
+<ul class="simple">
+<li><p>C-star of 2322.8 m/s (based on combustion chamber conditions)</p></li>
+<li><p>throat pressure of 118.85 bar and temperature of 3381.67 K</p></li>
+<li><p>exit pressure of 0.21521 bar, temperature of 1233.84 K</p></li>
+<li><p>at the nozzle exit, thrust coefficient = 1.8823, Isp = 4372.3 m/s</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">area_ratio</span> <span class="o">=</span> <span class="mf">68.8</span>
+
+<span class="n">pressure_throat_cea</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">118.85</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;Pa&#39;</span><span class="p">)</span>
+<span class="n">temperature_throat_cea</span> <span class="o">=</span> <span class="mf">3381.67</span>
+<span class="n">pressure_exit_cea</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">0.21521</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;Pa&#39;</span><span class="p">)</span>
+<span class="n">temperature_exit_cea</span> <span class="o">=</span> <span class="mf">1233.84</span>
+<span class="n">c_star_cea</span> <span class="o">=</span> <span class="mf">2322.8</span>
+<span class="n">thrust_coeff_cea</span> <span class="o">=</span> <span class="mf">1.8823</span>
+<span class="n">specific_impulse_cea</span> <span class="o">=</span> <span class="mf">4372.3</span>
+<span class="n">specific_impulse_vac_cea</span> <span class="o">=</span> <span class="mf">4538.6</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="c-star">
+<h3>C-star<a class="headerlink" href="#c-star" title="Permalink to this headline">¶</a></h3>
+<p>We can calculate <span class="math notranslate nohighlight">\(c^*\)</span> directly using the combustion chamber state already obtained with Cantera:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_c_star</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">molecular_weight</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="n">temperature</span> <span class="o">/</span> <span class="p">(</span><span class="n">molecular_weight</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">))</span> <span class="o">*</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">entropy_chamber</span> <span class="o">=</span> <span class="n">gas2</span><span class="o">.</span><span class="n">s</span>
+<span class="n">enthalpy_chamber</span> <span class="o">=</span> <span class="n">gas2</span><span class="o">.</span><span class="n">enthalpy_mass</span>
+<span class="n">mole_fractions_chamber</span> <span class="o">=</span> <span class="n">gas2</span><span class="o">.</span><span class="n">X</span>
+<span class="n">gamma_chamber</span> <span class="o">=</span> <span class="n">gamma_s</span>
+
+<span class="n">c_star</span> <span class="o">=</span> <span class="n">calculate_c_star</span><span class="p">(</span><span class="n">gamma_chamber</span><span class="p">,</span> <span class="n">gas2</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">gas2</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;c-star: </span><span class="si">{</span><span class="n">c_star</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> m/s&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in c-star: &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">c_star</span> <span class="o">-</span> <span class="n">c_star_cea</span><span class="p">)</span><span class="o">/</span><span class="n">c_star_cea</span><span class="si">:</span><span class="s1"> .3e</span><span class="si">}</span><span class="s1"> %&#39;</span>
+      <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c-star:  2323.0 m/s
+Error in c-star:  7.130e-03 %
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="throat-conditions">
+<h3>Throat conditions<a class="headerlink" href="#throat-conditions" title="Permalink to this headline">¶</a></h3>
+<p>The nozzle flow from the combustion chamber to the throat is isentropic, and at the throat the flow velocity matches the sonic velocity. We need to iterate to determine the pressure and other properties.</p>
+<p>From 1D isentropic flow assumptions, the equation</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{p_c}{p_t} = \left( \frac{\gamma_s + 1}{2} \right)^{\frac{\gamma_s}{\gamma_s - 1}}
+\]</div>
+<p>applies exactly, but only if <span class="math notranslate nohighlight">\(\gamma_s\)</span> remains constant from the chamber to the throat.
+This works for the frozen-flow assumption, but not for shifting equilibrium, where the gas composition
+will adjust with changing pressure and temperature.</p>
+<p>We can use this equation to get a first estimate of throat pressure, <span class="math notranslate nohighlight">\(p_{t,1}\)</span>, then equilibrate
+the gas mixture at <span class="math notranslate nohighlight">\(s_c\)</span> (chamber entropy) and <span class="math notranslate nohighlight">\(p_{t,1}\)</span>.</p>
+<p>The throat state is correct and converged when the velocity is sonic (i.e., equals the speed of sound).
+CEA checks for convergence using</p>
+<div class="math notranslate nohighlight">
+\[
+\left| \frac{u_t^2 - a_t^2}{u_t^2} \right| = \left| 1 - \frac{1}{M_t^2} \right| \leq 0.4 \cdot 10^{-4} \;,
+\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+M_t &amp;= \frac{u_t}{a_t} \\
+u_t &amp;= \sqrt{2 \left( h_c - h_t \right) } \\
+a_t &amp;= \sqrt{ \gamma_s R T_t } \;,
+\end{align}
+\end{split}\]</div>
+<p>using the properties at the current iteration.
+If the solution is not converged, we get an improved estimate for pressure:</p>
+<div class="math notranslate nohighlight">
+\[
+p_{t, k+1} = \left( p \frac{1 + \gamma_s M^2}{1 + \gamma_s} \right)_{t, k} \;,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(k\)</span> is the iteration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gas_throat</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;nasa_h2o2.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;gas&#39;</span><span class="p">)</span>
+
+<span class="n">pressure_throat</span> <span class="o">=</span> <span class="n">pressure_chamber</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">gamma_chamber</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">gamma_chamber</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma_chamber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># based on CEA defaults</span>
+<span class="n">max_iter_throat</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">tolerance_throat</span> <span class="o">=</span> <span class="mf">0.4e-4</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Throat iterations:&#39;</span><span class="p">)</span>
+<span class="n">mach</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">num_iter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">residual</span> <span class="o">&gt;</span> <span class="n">tolerance_throat</span><span class="p">:</span>
+    <span class="n">num_iter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">num_iter</span> <span class="o">==</span> <span class="n">max_iter_throat</span><span class="p">:</span>
+        <span class="k">break</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error: more than </span><span class="si">{</span><span class="n">max_iter_throat</span><span class="si">}</span><span class="s1"> iterations required for throat calculation&#39;</span><span class="p">)</span>
+    <span class="n">pressure_throat</span> <span class="o">=</span> <span class="n">pressure_throat</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">gamma_s</span> <span class="o">*</span> <span class="n">mach</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">gamma_s</span><span class="p">)</span>
+    
+    <span class="n">gas_throat</span><span class="o">.</span><span class="n">SPX</span> <span class="o">=</span> <span class="n">entropy_chamber</span><span class="p">,</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure_throat</span><span class="p">),</span> <span class="n">mole_fractions_chamber</span>
+    <span class="n">gas_throat</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;SP&#39;</span><span class="p">)</span>
+
+    <span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas_throat</span><span class="p">)</span>
+    <span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">gamma_s</span> <span class="o">=</span> <span class="n">get_thermo_properties</span><span class="p">(</span>
+        <span class="n">gas_throat</span><span class="p">,</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">)</span>
+    
+    <span class="n">velocity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">enthalpy_chamber</span> <span class="o">-</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">enthalpy_mass</span><span class="p">))</span>
+    <span class="n">speed_sound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">gamma_s</span> <span class="o">/</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">mean_molecular_weight</span>
+        <span class="p">)</span>
+    <span class="n">mach</span> <span class="o">=</span> <span class="n">velocity</span> <span class="o">/</span> <span class="n">speed_sound</span>
+
+    <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="n">mach</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">residual</span><span class="si">:</span><span class="s1"> .3e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">temperature_throat</span> <span class="o">=</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">T</span>
+<span class="n">pressure_throat</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">gas_throat</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">)</span>
+<span class="n">gamma_s_throat</span> <span class="o">=</span> <span class="n">gamma_s</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in throat temperature: &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">temperature_throat</span> <span class="o">-</span> <span class="n">temperature_throat_cea</span><span class="p">)</span><span class="o">/</span><span class="n">temperature_throat_cea</span><span class="si">:</span><span class="s1"> .3e</span><span class="si">}</span><span class="s1"> %&#39;</span>
+      <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in throat pressure: &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">pressure_throat</span> <span class="o">-</span> <span class="n">pressure_throat_cea</span><span class="p">)</span><span class="o">/</span><span class="n">pressure_throat_cea</span><span class="si">:</span><span class="s1"> .3e~P</span><span class="si">}</span><span class="s1"> %&#39;</span>
+      <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Throat iterations:
+1   9.420e-04
+2   1.590e-06
+Error in throat temperature:  2.640e-02 %
+Error in throat pressure: 5.430e-03 %
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="exit-conditions">
+<h3>Exit conditions<a class="headerlink" href="#exit-conditions" title="Permalink to this headline">¶</a></h3>
+<p>The conditions at the nozzle exit (or any location, really) can be determined with a given
+exit-to-throat area ratio <span class="math notranslate nohighlight">\(A_e / A_t\)</span>, by an iterative approach.</p>
+<p>First, calculate the area per unit mass flow rate at the throat:</p>
+<div class="math notranslate nohighlight">
+\[
+\left( \frac{A}{\dot{m}} \right)_t = \frac{1}{\rho_t u_t} = \frac{T_t n_t \mathcal{R}}{p_t u_t} \;,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(n_t = 1 / \text{MW}_t\)</span> is the number of moles.
+Then, for a supersonic nozzle with an area ratio greater than two (<span class="math notranslate nohighlight">\(A_e / A_t \geq 2\)</span>),
+we can obtain an initial estimate for pressure ratio using an empirical formula:</p>
+<div class="math notranslate nohighlight">
+\[
+\log \frac{p_c}{p_e} = \gamma_s + 1.4 \log \frac{A_e}{A_t} \;,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma_s\)</span> is evaluated using the throat state.</p>
+<p>An improved estimate of pressure ratio for the next iteration can be found using:</p>
+<div class="math notranslate nohighlight">
+\[
+\left( \log \frac{p_c}{p_e} \right)_{k+1} = \left( \log \frac{p_c}{p_e} \right)_k + \left[ \left( \frac{\partial \log \frac{p_c}{p_e} }{\partial \log \frac{A_e}{A_t} } \right)_s \right]_k \times \left[ \log \frac{A_e}{A_t} - \left( \log \frac{A_e}{A_t} \right)_k \right] \;,
+\]</div>
+<p>where the derivative is</p>
+<div class="math notranslate nohighlight">
+\[
+\left( \frac{\partial \log \frac{p_c}{p_e} }{\partial \log \frac{A_e}{A_t} } \right)_s = \left( \frac{\gamma_s u^2}{u^2 - a^2} \right)_e
+\]</div>
+<p>and the <span class="math notranslate nohighlight">\(k\)</span>th estimate of area ratio comes from</p>
+<div class="math notranslate nohighlight">
+\[
+\left( \frac{A_e}{A_t} \right)_k = \left( \frac{T_e n_e \mathcal{R}}{p_e u_e} \right)_k \frac{1}{ \left(A/\dot{m}\right)_t } \;.
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># this is constant</span>
+<span class="n">A_mdot_thr</span> <span class="o">=</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="p">(</span><span class="n">gas_throat</span><span class="o">.</span><span class="n">P</span> <span class="o">*</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
+
+<span class="n">gas_exit</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;nasa_h2o2.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;gas&#39;</span><span class="p">)</span>
+<span class="n">gas_exit</span><span class="o">.</span><span class="n">SPX</span> <span class="o">=</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">gas_throat</span><span class="o">.</span><span class="n">X</span>
+
+<span class="c1"># initial estimate for pressure ratio</span>
+<span class="n">pinf_pe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">gamma_s_throat</span> <span class="o">+</span> <span class="mf">1.4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">area_ratio</span><span class="p">))</span>
+<span class="n">p_exit</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure_chamber</span><span class="p">)</span> <span class="o">/</span> <span class="n">pinf_pe</span>
+
+<span class="n">gas_exit</span><span class="o">.</span><span class="n">SP</span> <span class="o">=</span> <span class="n">entropy_chamber</span><span class="p">,</span> <span class="n">p_exit</span>
+<span class="n">gas_exit</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;SP&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iter  T_exit   Ae/At    P_exit     P_inf/P&#39;</span><span class="p">)</span>
+<span class="n">num_iter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> K   </span><span class="si">{</span><span class="n">Ae_At</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mf">1e5</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> bar  </span><span class="si">{</span><span class="n">pinf_pe</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">max_iter_exit</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">tolerance_exit</span> <span class="o">=</span> <span class="mf">4e-5</span>
+
+<span class="n">residual</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">residual</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance_exit</span><span class="p">:</span>
+    <span class="n">num_iter</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="k">if</span> <span class="n">num_iter</span> <span class="o">==</span> <span class="n">max_iter_throat</span><span class="p">:</span>
+        <span class="k">break</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error: more than </span><span class="si">{</span><span class="n">max_iter_exit</span><span class="si">}</span><span class="s1"> iterations required for exit calculation&#39;</span><span class="p">)</span>
+
+    <span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas_exit</span><span class="p">)</span>
+    <span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">gamma_s</span> <span class="o">=</span> <span class="n">get_thermo_properties</span><span class="p">(</span>
+        <span class="n">gas_exit</span><span class="p">,</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="n">velocity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">enthalpy_chamber</span> <span class="o">-</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">enthalpy_mass</span><span class="p">))</span>
+    <span class="n">speed_sound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">gamma_s</span> <span class="o">/</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
+
+    <span class="n">Ae_At</span> <span class="o">=</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="p">(</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span> <span class="o">*</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span> <span class="o">/</span> <span class="n">A_mdot_thr</span>
+
+    <span class="n">dlogp_dlogA</span> <span class="o">=</span> <span class="n">gamma_s</span> <span class="o">*</span> <span class="n">velocity</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">velocity</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">speed_sound</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">residual</span> <span class="o">=</span> <span class="n">dlogp_dlogA</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">area_ratio</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Ae_At</span><span class="p">))</span>
+    <span class="n">log_pinf_pe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pinf_pe</span><span class="p">)</span> <span class="o">+</span> <span class="n">residual</span>
+
+    <span class="n">pinf_pe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_pinf_pe</span><span class="p">)</span>
+    <span class="n">p_exit</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure_chamber</span><span class="p">)</span> <span class="o">/</span> <span class="n">pinf_pe</span>
+
+    <span class="n">gas_exit</span><span class="o">.</span><span class="n">SP</span> <span class="o">=</span> <span class="n">entropy_chamber</span><span class="p">,</span> <span class="n">p_exit</span>
+    <span class="n">gas_exit</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;SP&#39;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> K  </span><span class="si">{</span><span class="n">Ae_At</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mf">1e5</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> bar  </span><span class="si">{</span><span class="n">pinf_pe</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iter  T_exit   Ae/At    P_exit     P_inf/P
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">14</span><span class="o">-</span><span class="mf">92e47</span><span class="n">d8c6d58</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iter  T_exit   Ae/At    P_exit     P_inf/P&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="n">num_iter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="ne">---&gt; </span><span class="mi">16</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> K   </span><span class="si">{</span><span class="n">Ae_At</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mf">1e5</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> bar  </span><span class="si">{</span><span class="n">pinf_pe</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> 
+<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="n">max_iter_exit</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="ne">NameError</span>: name &#39;Ae_At&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exit temperature: </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1"> K&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exit pressure: </span><span class="si">{</span><span class="n">Q_</span><span class="p">(</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .5f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in exit temperature: &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">temperature_exit_cea</span><span class="p">)</span><span class="o">/</span><span class="n">temperature_exit_cea</span><span class="si">:</span><span class="s1"> .3e</span><span class="si">}</span><span class="s1"> %&#39;</span>
+      <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in exit pressure: &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Q_</span><span class="p">(</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">pressure_exit_cea</span><span class="p">)</span><span class="o">/</span><span class="n">pressure_exit_cea</span><span class="si">:</span><span class="s1"> .3e~P</span><span class="si">}</span><span class="s1"> %&#39;</span>
+      <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Exit temperature:  1234.18 K
+Exit pressure: 0.21528 bar
+
+Error in exit temperature:  2.731e-02 %
+Error in exit pressure: 3.329e-02 %
+</pre></div>
+</div>
+</div>
+</div>
+<p>Those results look good! Now we can calculate thrust coefficient and specific impulse, using</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+C_F &amp;= \frac{v_e}{c^*} \\
+I_{\text{sp}} &amp;= \frac{v_e}{g_0} \\
+I_{\text{vac}} &amp;= I_{\text{sp}} + \frac{p_e}{A_e}{\dot{m}} = I_{\text{sp}} + \frac{T_e \mathcal{R}}{v_e \overline{M}} \;.
+\end{align}
+\end{split}\]</div>
+<p>CEA prints specific impulse with units of velocity, without the reference gravity term,
+so we will compute both versions for comparison.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas_exit</span><span class="p">)</span>
+<span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">gamma_s</span> <span class="o">=</span> <span class="n">get_thermo_properties</span><span class="p">(</span>
+    <span class="n">gas_exit</span><span class="p">,</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="n">velocity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">enthalpy_chamber</span> <span class="o">-</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">enthalpy_mass</span><span class="p">))</span>
+
+<span class="n">thrust_coeff</span> <span class="o">=</span> <span class="n">velocity</span> <span class="o">/</span> <span class="n">c_star</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust coefficient: </span><span class="si">{</span><span class="n">thrust_coeff</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">g0</span> <span class="o">=</span> <span class="mf">9.80665</span>
+<span class="n">Isp</span> <span class="o">=</span> <span class="n">velocity</span>
+<span class="n">Ivac</span> <span class="o">=</span> <span class="n">Isp</span> <span class="o">+</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">/</span> <span class="p">(</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;I_sp = </span><span class="si">{</span><span class="n">Isp</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> m/s&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;I_vac = </span><span class="si">{</span><span class="n">Ivac</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> m/s&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in Isp: &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Isp</span> <span class="o">-</span> <span class="n">specific_impulse_cea</span><span class="p">)</span><span class="o">/</span><span class="n">specific_impulse_cea</span><span class="si">:</span><span class="s1"> .3e</span><span class="si">}</span><span class="s1"> %&#39;</span>
+      <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in Ivac: &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Ivac</span> <span class="o">-</span> <span class="n">specific_impulse_vac_cea</span><span class="p">)</span><span class="o">/</span><span class="n">specific_impulse_vac_cea</span><span class="si">:</span><span class="s1"> .3e</span><span class="si">}</span><span class="s1"> %&#39;</span>
+      <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Thrust coefficient:  1.8822
+I_sp =  4372.2 m/s
+I_vac =  4538.5 m/s
+
+Error in Isp:  2.903e-03 %
+Error in Ivac:  2.513e-03 %
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Actual specific impulse:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;I_sp = </span><span class="si">{</span><span class="n">Isp</span> <span class="o">/</span> <span class="n">g0</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> s&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;I_vac = </span><span class="si">{</span><span class="n">Ivac</span> <span class="o">/</span> <span class="n">g0</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Actual specific impulse:
+I_sp =  445.8 s
+I_vac =  462.8 s
+</pre></div>
+</div>
+</div>
+</div>
+<p>🎉 🚀 🛰</p>
+<p>These comparisons look good!</p>
+<p>The approach outlined here shows how we can perform calculations equivalent to CEA using Python and Cantera,
+at least for typical problems.
+CEA does support many additional options, including assuming frozen flow for the entire nozzle or after particular locations,
+calculations for a finite-area combustor (rather than an infinite-area combustor, as the work here assumes), and more.</p>
+</div>
 </div>
 </div>
 
