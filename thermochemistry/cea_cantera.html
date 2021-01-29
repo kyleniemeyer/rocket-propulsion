@@ -1297,6 +1297,8 @@ we can obtain an initial estimate for pressure ratio using an empirical formula:
 <span class="n">gas_exit</span><span class="o">.</span><span class="n">SP</span> <span class="o">=</span> <span class="n">entropy_chamber</span><span class="p">,</span> <span class="n">p_exit</span>
 <span class="n">gas_exit</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;SP&#39;</span><span class="p">)</span>
 
+<span class="n">Ae_At</span> <span class="o">=</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="p">(</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span> <span class="o">*</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">gas_exit</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span> <span class="o">/</span> <span class="n">A_mdot_thr</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iter  T_exit   Ae/At    P_exit     P_inf/P&#39;</span><span class="p">)</span>
 <span class="n">num_iter</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> K   </span><span class="si">{</span><span class="n">Ae_At</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mf">1e5</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> bar  </span><span class="si">{</span><span class="n">pinf_pe</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1337,18 +1339,10 @@ we can obtain an initial estimate for pressure ratio using an empirical formula:
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iter  T_exit   Ae/At    P_exit     P_inf/P
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">14</span><span class="o">-</span><span class="mf">92e47</span><span class="n">d8c6d58</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iter  T_exit   Ae/At    P_exit     P_inf/P&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="n">num_iter</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="ne">---&gt; </span><span class="mi">16</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">T</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> K   </span><span class="si">{</span><span class="n">Ae_At</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">gas_exit</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mf">1e5</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> bar  </span><span class="si">{</span><span class="n">pinf_pe</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> 
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="n">max_iter_exit</span> <span class="o">=</span> <span class="mi">10</span>
-
-<span class="ne">NameError</span>: name &#39;Ae_At&#39; is not defined
+0  1183.787 K    230.93  0.175 bar  1178.875
+1  1234.196 K   80.36  0.215 bar  960.727
+2  1234.177 K   68.80  0.215 bar  960.800
+3  1234.177 K   68.80  0.215 bar  960.800
 </pre></div>
 </div>
 </div>
