@@ -16,6 +16,10 @@
     - file: thermochemistry/thermochemistry
     - file: thermochemistry/cea_cantera
 
+- part: Chemical propulsion
+  chapters:
+    - file: chemical-rockets/hybrid-rockets
+
 - part: Reference
   chapters:
   - file: zbibliography
