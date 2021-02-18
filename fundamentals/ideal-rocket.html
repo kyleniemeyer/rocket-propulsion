@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -54,6 +52,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -143,6 +143,18 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../thermochemistry/cea_cantera.html">
    Implementing CEA calculations using Cantera
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Chemical propulsion
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../chemical-rockets/hybrid-rockets.html">
+   Hybrid Rocket Motors
   </a>
  </li>
 </ul>
@@ -629,10 +641,10 @@ Thrust = (1252.5 kPa * A_e)
 </div>
 </div>
 <p>First, we need to calculate the nozzle pressure ratio, which requires obtaining the pressure at the rocket’s flight altitude.</p>
-<p>The 1976 U.S. Standard Atmosphere <a class="bibtex reference internal" href="../zbibliography.html#standard-atmosphere-1976" id="id1">[NOAANASAaUSAF76]</a> is a model for how pressure, temperature, density, etc., vary
+<p>The 1976 U.S. Standard Atmosphere <span id="id1">[<a class="reference internal" href="../zbibliography.html#id3"><span>NOAANASAaUSAF76</span></a>]</span> is a model for how pressure, temperature, density, etc., vary
 with altitude in the atmosphere, and provides reasonable answers for up to about 86 km.</p>
-<p>The <a class="reference external" href="https://github.com/CalebBell/fluids"><code class="docutils literal notranslate"><span class="pre">fluids</span></code> package</a> provides a convenient interface to this model in Python <a class="bibtex reference internal" href="../zbibliography.html#fluids" id="id2">[Bel20]</a>,
-along with other models such as the NRLMSISE-00 model <a class="bibtex reference internal" href="../zbibliography.html#picone2002" id="id3">[PHDA02]</a>, which applies up to 1000 km.</p>
+<p>The <a class="reference external" href="https://github.com/CalebBell/fluids"><code class="docutils literal notranslate"><span class="pre">fluids</span></code> package</a> provides a convenient interface to this model in Python <span id="id2">[<a class="reference internal" href="../zbibliography.html#id5"><span>Bel20</span></a>]</span>,
+along with other models such as the NRLMSISE-00 model <span id="id3">[<a class="reference internal" href="../zbibliography.html#id4"><span>PHDA02</span></a>]</span>, which applies up to 1000 km.</p>
 <p>Let’s look at how temperature and pressure vary with altitude, using this model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

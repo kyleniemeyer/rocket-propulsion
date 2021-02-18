@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -54,10 +52,12 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Bibliography" href="../zbibliography.html" />
+    <link rel="next" title="Hybrid Rocket Motors" href="../chemical-rockets/hybrid-rockets.html" />
     <link rel="prev" title="Thermochemistry" href="thermochemistry.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -143,6 +143,18 @@
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Implementing CEA calculations using Cantera
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Chemical propulsion
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../chemical-rockets/hybrid-rockets.html">
+   Hybrid Rocket Motors
   </a>
  </li>
 </ul>
@@ -496,7 +508,7 @@ properties and the species mole fractions.</p>
 <p>Well, 1.492 is quite different from 1.255, and this would lead to substantially different rocket performance parameters that depend on <span class="math notranslate nohighlight">\(\gamma\)</span>.</p>
 <p>So, what’s going on?</p>
 <p>Well, the key lies in examining the actual definition of specific heat, following Gordon and
-McBride <a class="bibtex reference internal" href="../zbibliography.html#cea-analysis" id="id1">[GM94]</a>:</p>
+McBride <span id="id1">[<a class="reference internal" href="../zbibliography.html#id6"><span>GM94</span></a>]</span>:</p>
 <div class="math notranslate nohighlight">
 \[
 C_p = \left( \frac{\partial h}{\partial T} \right)_P \;.
@@ -516,7 +528,7 @@ C_{p,e} &amp;= C_{p,f} + C_{p,r} \\
 <p>But, Cantera defines quantities like specific heat (and other thermodynamic quantities based on derivatives)
 at fixed composition, meaning Cantera’s specific heat is just the frozen contribution <span class="math notranslate nohighlight">\(C_{p,f}\)</span>.</p>
 <p>We can obtain the full equilibrium-based value of specific heat, but it requires determining additional
-thermodynamic derivatives. Following Gordon and McBride <a class="bibtex reference internal" href="../zbibliography.html#cea-analysis" id="id2">[GM94]</a> again, we can obtain this system
+thermodynamic derivatives. Following Gordon and McBride <span id="id2">[<a class="reference internal" href="../zbibliography.html#id6"><span>GM94</span></a>]</span> again, we can obtain this system
 of linear equations:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -728,12 +740,12 @@ Speed of sound =  2795.8 m/s
 <h2>Adiabatic combustion<a class="headerlink" href="#adiabatic-combustion" title="Permalink to this headline">¶</a></h2>
 <p>CEA also supports calculating the chamber temperature (along with composition) for adiabatic combustion, both with gaseous and liquid propellants.</p>
 <p>Cantera’s equilibrium solver that we used above handles constant enthlapy and pressure equilibrium (<code class="docutils literal notranslate"><span class="pre">HP</span></code>) just fine with gaseous reactants, but how to</p>
-<p>CEA has a database of reactants with assigned enthalpies, as described by Gordon and McBride <a class="bibtex reference internal" href="../zbibliography.html#cea-analysis" id="id3">[GM94]</a>:</p>
+<p>CEA has a database of reactants with assigned enthalpies, as described by Gordon and McBride <span id="id3">[<a class="reference internal" href="../zbibliography.html#id6"><span>GM94</span></a>]</span>:</p>
 <ul class="simple">
 <li><p>noncryogenic reactants are represented via enthalpy of formation (i.e., heat of formation) at the standard reference temperature of 298.15 K</p></li>
 <li><p>cryogenic liquid reactants are represented via enthalpies given at their boiling points, which represent the standard enthalpy of formation minus the sensible heat (between 298.15 K and the boiling point), the heat of vaporization at the boiling point, and also the difference in enthalpy due to real gas effects at the boiling point.</p></li>
 </ul>
-<p>For example, CEA’s thermodynamic database <a class="bibtex reference internal" href="../zbibliography.html#nasa-thermo" id="id4">[MZG02]</a> represents liquid dinitrogen
+<p>For example, CEA’s thermodynamic database <span id="id4">[<a class="reference internal" href="../zbibliography.html#id8"><span>MZG02</span></a>]</span> represents liquid dinitrogen
 tetroxide (N<sub>2</sub>O<sub>4</sub>), which is an oxidizer used with hydrazine, with</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>N2O4(L)           Dinitrogen tetroxide. McBride,1996 pp85,93.                   
  0 g 6/96 N   2.00O   4.00    0.00    0.00    0.00 1   92.0110000     -17549.000
@@ -747,7 +759,7 @@ tetroxide (N<sub>2</sub>O<sub>4</sub>), which is an oxidizer used with hydrazine
 </pre></div>
 </div>
 <p>The full format of species thermodynamic entries is given in the CEA User Manual
-<a class="bibtex reference internal" href="../zbibliography.html#cea-manual" id="id5">[GM96]</a>, but for these reactants the key information includes</p>
+<span id="id5">[<a class="reference internal" href="../zbibliography.html#id7"><span>GM96</span></a>]</span>, but for these reactants the key information includes</p>
 <ul class="simple">
 <li><p>species name, given in the first line</p></li>
 <li><p>elemental composition, given in a fixed column format in the second line</p></li>
@@ -1476,7 +1488,7 @@ calculations for a finite-area combustor (rather than an infinite-area combustor
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="thermochemistry.html" title="previous page">Thermochemistry</a>
-    <a class='right-next' id="next-link" href="../zbibliography.html" title="next page">Bibliography</a>
+    <a class='right-next' id="next-link" href="../chemical-rockets/hybrid-rockets.html" title="next page">Hybrid Rocket Motors</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
