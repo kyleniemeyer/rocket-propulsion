@@ -267,6 +267,20 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#design-example">
+   Design example
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -280,6 +294,9 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">least_squares</span><span class="p">,</span> <span class="n">root_scalar</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">UnivariateSpline</span>
 
 <span class="c1"># Module used to parse and work with units</span>
 <span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UnitRegistry</span>
@@ -320,9 +337,7 @@ Source: Sutton and Biblarz <span id="id1">[<a class="reference internal" href=".
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">least_squares</span>
-
-<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">Go</span><span class="p">,</span> <span class="n">rdot</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">Go</span><span class="p">,</span> <span class="n">rdot</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; rdot = a * Go^n</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">rdot</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">Go</span><span class="p">,</span> <span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -355,14 +370,323 @@ Source: Sutton and Biblarz <span id="id1">[<a class="reference internal" href=".
 <span class="n">Go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">rdot</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">Go</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">Go</span><span class="p">,</span> <span class="n">rdot</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fd7bdd49d90&gt;]
+<img alt="../_images/hybrid-rockets_8_0.png" src="../_images/hybrid-rockets_8_0.png" />
+</div>
+</div>
+<div class="section" id="design-example">
+<h2>Design example<a class="headerlink" href="#design-example" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diameter_outer</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.175</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">)</span>
+
+<span class="n">diameter_port</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">)</span>
+<span class="n">diameter_throat</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">)</span>
+<span class="n">length</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">)</span>
+<span class="n">area_ratio</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">density_fuel</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">915</span><span class="p">,</span> <span class="s1">&#39;kg/m^3&#39;</span><span class="p">)</span>
+
+<span class="n">vdot_ox</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;liter/min&#39;</span><span class="p">)</span>
+<span class="n">pressure_std</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;atm&#39;</span><span class="p">)</span>
+<span class="n">temperature_std</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
+<span class="n">gas_constant_air</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">8314</span><span class="p">,</span> <span class="s1">&#39;J/(kmol*K)&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;kg/kmol&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/hybrid-rockets_8_1.png" src="../_images/hybrid-rockets_8_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial values</span>
+<span class="n">area_port</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">diameter_port</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span>
+<span class="n">area_burn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">diameter_port</span> <span class="o">*</span> <span class="n">length</span>
+
+<span class="n">mdot_ox</span> <span class="o">=</span> <span class="p">(</span><span class="n">pressure_std</span> <span class="o">/</span> <span class="p">(</span><span class="n">gas_constant_air</span> <span class="o">*</span> <span class="n">temperature_std</span><span class="p">))</span> <span class="o">*</span> <span class="n">vdot_ox</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mass flow rate of oxidizer: </span><span class="si">{</span><span class="n">mdot_ox</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kg/s&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .4f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mass flow rate of oxidizer: 0.0108 kg/s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">volume_fuel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">length</span> <span class="o">*</span> <span class="p">((</span><span class="n">diameter_outer</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">diameter_port</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mass_fuel_initial</span> <span class="o">=</span> <span class="n">density_fuel</span> <span class="o">*</span> <span class="n">volume_fuel</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Initial fuel mass: </span><span class="si">{</span><span class="n">mass_fuel_initial</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kg&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initial fuel mass: 0.13 kg
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Gox</span> <span class="o">=</span> <span class="p">(</span><span class="n">mdot_ox</span> <span class="o">/</span> <span class="n">area_port</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;lb/(s*in^2)&#39;</span><span class="p">)</span>
+<span class="n">rdot</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">0.104</span> <span class="o">*</span> <span class="n">Gox</span><span class="o">.</span><span class="n">magnitude</span><span class="o">**</span><span class="mf">0.681</span><span class="p">,</span> <span class="s1">&#39;in/s&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Fuel burning rate: </span><span class="si">{</span><span class="n">rdot</span><span class="si">:</span><span class="s1"> .4f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fuel burning rate: 0.0248 in/s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdot_fuel</span> <span class="o">=</span> <span class="n">density_fuel</span> <span class="o">*</span> <span class="n">area_burn</span> <span class="o">*</span> <span class="n">rdot</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mass flow rate of fuel: </span><span class="si">{</span><span class="n">mdot_fuel</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kg/s&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .4f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mass flow rate of fuel: 0.0058 kg/s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ox_fuel_ratio</span> <span class="o">=</span> <span class="n">mdot_ox</span> <span class="o">/</span> <span class="n">mdot_fuel</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;O/F ratio: </span><span class="si">{</span><span class="n">ox_fuel_ratio</span><span class="o">.</span><span class="n">to_base_units</span><span class="p">()</span><span class="si">:</span><span class="s1"> .3f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>O/F ratio: 1.857
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cstar</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">1759</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">1.1728</span>
+<span class="n">MW</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">20.828</span><span class="p">,</span> <span class="s1">&#39;g/mol&#39;</span><span class="p">)</span>
+
+<span class="n">area_throat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">diameter_throat</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span>
+
+<span class="n">pressure_chamber</span> <span class="o">=</span> <span class="n">cstar</span> <span class="o">*</span> <span class="p">(</span><span class="n">mdot_ox</span> <span class="o">+</span> <span class="n">mdot_fuel</span><span class="p">)</span> <span class="o">/</span> <span class="n">area_throat</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Chamber pressure: </span><span class="si">{</span><span class="n">pressure_chamber</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;psi&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.1f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chamber pressure: 373.0 psi
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_thrust_coeff</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Calculates thrust coefficient for optimum expansion.</span>
+<span class="sd">    pressure ratio: chamber / exit</span>
+<span class="sd">    area ratio: exit / throat</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> 
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> 
+        <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">pressure_ratio</span><span class="p">,</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">gamma</span><span class="p">))</span>
+        <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">calc_area_ratio</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates area ratio based on specific heat ratio and pressure ratio.</span>
+<span class="sd">    pressure ratio: chamber / exit</span>
+<span class="sd">    area ratio: exit / throat</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> 
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span>
+                <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">gamma</span><span class="p">)</span><span class="o">/</span><span class="n">gamma</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="p">)</span>
+
+<span class="c1"># This function returns zero for a given area ratio, pressure ratio, and gamma,</span>
+<span class="c1">#and is used to numerically calculate pressure ratio given the other two values.</span>
+<span class="k">def</span> <span class="nf">root_area_ratio</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">area_ratio</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; pressure ratio: chamber / exit</span>
+<span class="sd">    area ratio: exit / throat</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">area_ratio</span> <span class="o">-</span> <span class="n">calc_area_ratio</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span> <span class="o">=</span> <span class="n">root_scalar</span><span class="p">(</span><span class="n">root_area_ratio</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">x1</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">area_ratio</span><span class="p">))</span>
+<span class="n">pressure_ratio</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">root</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Pressure ratio: </span><span class="si">{</span><span class="n">pressure_ratio</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pressure ratio: 29.57
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">thrust_coeff</span> <span class="o">=</span> <span class="n">calc_thrust_coeff</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust coefficient: </span><span class="si">{</span><span class="n">thrust_coeff</span><span class="si">:</span><span class="s1"> .3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">specific_impulse</span> <span class="o">=</span> <span class="n">thrust_coeff</span> <span class="o">*</span> <span class="n">cstar</span> <span class="o">/</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">9.81</span><span class="p">,</span> <span class="s1">&#39;m/s^2&#39;</span><span class="p">)</span>
+<span class="n">thrust</span> <span class="o">=</span> <span class="n">thrust_coeff</span> <span class="o">*</span> <span class="n">pressure_chamber</span> <span class="o">*</span> <span class="n">area_throat</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Specific impulse: </span><span class="si">{</span><span class="n">specific_impulse</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .1f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Thrust: </span><span class="si">{</span><span class="n">thrust</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;lbf&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1"> .2f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Thrust coefficient:  1.485
+Specific impulse: 266.3 s
+Thrust: 9.79 lbf
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oxid_fuel_ratios</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">5.3</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>
+<span class="n">gammas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">cstars</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;cea-output.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">continue</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GAMMAs&#39;</span><span class="p">:</span>
+        <span class="n">gammas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CSTAR,&#39;</span><span class="p">:</span>
+        <span class="n">cstars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+<span class="n">gammas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gammas</span><span class="p">)</span>
+<span class="n">cstars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cstars</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">oxid_fuel_ratios</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">gammas</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">oxid_fuel_ratios</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cstars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cstar_fit</span> <span class="o">=</span> <span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">oxid_fuel_ratios</span><span class="p">,</span> <span class="n">cstars</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s1">&#39;const&#39;</span><span class="p">)</span>
+<span class="n">gamma_fit</span> <span class="o">=</span> <span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">oxid_fuel_ratios</span><span class="p">,</span> <span class="n">gammas</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s1">&#39;const&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">oxid_fuel_ratios</span><span class="p">,</span> <span class="n">cstars</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;From CEA&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">cstar_fit</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Spline fit&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$c^*$ (m/s)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">oxid_fuel_ratios</span><span class="p">,</span> <span class="n">gammas</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gamma_fit</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\gamma$&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;O/F ratio&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/hybrid-rockets_21_0.png" src="../_images/hybrid-rockets_21_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_t</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">101.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
+
+<span class="n">radii</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="s1">&#39;in&#39;</span><span class="p">)</span>
+<span class="n">mdot_fuels</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="s1">&#39;kg/s&#39;</span><span class="p">)</span>
+<span class="n">mixture_ratios</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+<span class="n">specific_impulses</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">thrusts</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="s1">&#39;lbf&#39;</span><span class="p">)</span>
+
+<span class="n">radius_initial</span> <span class="o">=</span> <span class="n">diameter_port</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+    <span class="n">radii</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">((</span>
+        <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mf">0.681</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.104</span> <span class="o">*</span> <span class="p">(</span><span class="n">mdot_ox</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;lb/s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">**</span><span class="mf">0.681</span> <span class="o">*</span> <span class="n">time</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">+</span> 
+        <span class="n">radius_initial</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mf">0.681</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mf">0.681</span><span class="o">+</span><span class="mi">1</span><span class="p">)),</span>
+        <span class="s1">&#39;in&#39;</span><span class="p">)</span>
+    
+    <span class="n">area_port</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">radii</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">area_burn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">radii</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">length</span>
+    
+    <span class="n">Gox</span> <span class="o">=</span> <span class="p">(</span><span class="n">mdot_ox</span> <span class="o">/</span> <span class="n">area_port</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;lb/(s*in^2)&#39;</span><span class="p">)</span>
+    <span class="n">rdot</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">0.104</span> <span class="o">*</span> <span class="n">Gox</span><span class="o">.</span><span class="n">magnitude</span><span class="o">**</span><span class="mf">0.681</span><span class="p">,</span> <span class="s1">&#39;in/s&#39;</span><span class="p">)</span>
+    <span class="n">mdot_fuels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">density_fuel</span> <span class="o">*</span> <span class="n">area_burn</span> <span class="o">*</span> <span class="n">rdot</span>
+    <span class="n">mixture_ratios</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdot_ox</span> <span class="o">/</span> <span class="n">mdot_fuels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    
+    <span class="n">cstar</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">cstar_fit</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">[</span><span class="n">idx</span><span class="p">]),</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+    
+    <span class="n">pressure_chamber</span> <span class="o">=</span> <span class="n">cstar</span> <span class="o">*</span> <span class="p">(</span><span class="n">mdot_ox</span> <span class="o">+</span> <span class="n">mdot_fuels</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">/</span> <span class="n">area_throat</span>
+    
+    <span class="n">specific_impulses</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">thrust_coeff</span> <span class="o">*</span> <span class="n">cstar</span> <span class="o">/</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">9.81</span><span class="p">,</span> <span class="s1">&#39;m/s^2&#39;</span><span class="p">)</span>
+    <span class="n">thrusts</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">thrust_coeff</span> <span class="o">*</span> <span class="n">pressure_chamber</span> <span class="o">*</span> <span class="n">area_throat</span>
+    
+    <span class="c1"># should stop when mass of fuel is exhausted</span>
+    <span class="n">mass_fuel_consumed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">mdot_fuels</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mass_fuel_consumed</span> <span class="o">&gt;=</span> <span class="n">mass_fuel_initial</span><span class="p">:</span>
+        <span class="n">idx_end</span> <span class="o">=</span> <span class="n">idx</span>
+        <span class="n">time_end</span> <span class="o">=</span> <span class="n">time</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Fuel exhausted at </span><span class="si">{</span><span class="n">time_end</span><span class="si">:</span><span class="s1">.1f~P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">break</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fuel exhausted at 28.0 s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">[:</span><span class="n">idx_end</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="n">specific_impulses</span><span class="p">[:</span><span class="n">idx_end</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Specific impulse (sec)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">[:</span><span class="n">idx_end</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="n">thrusts</span><span class="p">[:</span><span class="n">idx_end</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;lbf&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Thrust (lbf)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (sec)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/hybrid-rockets_23_0.png" src="../_images/hybrid-rockets_23_0.png" />
+</div>
 </div>
 </div>
 </div>
