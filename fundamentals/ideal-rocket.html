@@ -426,7 +426,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2790/2082071481.py:3: DeprecationWarning: `set_matplotlib_formats` is deprecated since IPython 7.23, directly use `matplotlib_inline.backend_inline.set_matplotlib_formats()`
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2767/2082071481.py:3: DeprecationWarning: `set_matplotlib_formats` is deprecated since IPython 7.23, directly use `matplotlib_inline.backend_inline.set_matplotlib_formats()`
   set_matplotlib_formats(&#39;pdf&#39;, &#39;png&#39;)
 </pre></div>
 </div>
@@ -616,7 +616,7 @@ Find the nozzle area ratio, and the rocket thrust as a function of nozzle exit a
 \]</div>
 <p>so we can directly calculate the nozzle area ratio:</p>
 <div class="math notranslate nohighlight" id="equation-area-ratio">
-<span class="eqno">(5)<a class="headerlink" href="#equation-area-ratio" title="Permalink to this equation">¶</a></span>\[
+<span class="eqno">(4)<a class="headerlink" href="#equation-area-ratio" title="Permalink to this equation">¶</a></span>\[
 \frac{A_e}{A_t} = \epsilon = \left( \frac{2}{\gamma+1}\right)^{\frac{1}{\gamma-1}} \left( \frac{p_0}{p_e} \right)^{\frac{1}{\gamma}} \sqrt{ \frac{\gamma-1}{\gamma+1} \left[1 - \left( \frac{p_0}{p_e}\right)^{\frac{1-\gamma}{\gamma}} \right]^{-1} } \;.
 \]</div>
 <div class="cell docutils container">
@@ -647,7 +647,7 @@ Find the nozzle area ratio, and the rocket thrust as a function of nozzle exit a
 </div>
 <p>Since <span class="math notranslate nohighlight">\(p_e = p_a\)</span> by design (for an optimal nozzle), we can calculate the thrust coefficient using:</p>
 <div class="math notranslate nohighlight" id="equation-thrust-coefficient">
-<span class="eqno">(6)<a class="headerlink" href="#equation-thrust-coefficient" title="Permalink to this equation">¶</a></span>\[
+<span class="eqno">(5)<a class="headerlink" href="#equation-thrust-coefficient" title="Permalink to this equation">¶</a></span>\[
 C_F = C_F^0 = \sqrt{\frac{2\gamma^2}{\gamma-1} \left( \frac{2}{\gamma+1} \right)^{\frac{\gamma+1}{\gamma-1}} \left[1 - \left( \frac{p_e}{p_0} \right)^{\frac{\gamma-1}{\gamma}} \right] }
 \]</div>
 <p>and then thrust using:</p>
@@ -775,7 +775,7 @@ Pressure ratio (p_c/p_e): 264.2 dimensionless
 C_F &amp;= C_F^0 = g \left( \gamma, \frac{p_c}{p_e} \right) \\
 \end{align*}
 \end{split}\]</div>
-<p>which are defined in Equations <a class="reference internal" href="#equation-area-ratio">(5)</a> and <a class="reference internal" href="#equation-thrust-coefficient">(6)</a> above—and we have already written functions to evaluate them!.</p>
+<p>which are defined in Equations <a class="reference internal" href="#equation-area-ratio">(4)</a> and <a class="reference internal" href="#equation-thrust-coefficient">(5)</a> above—and we have already written functions to evaluate them!.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">area_ratio</span> <span class="o">=</span> <span class="n">calc_area_ratio</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pressure_ratio</span><span class="p">)</span>

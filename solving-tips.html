@@ -804,11 +804,16 @@ Pressure in SI: 68947.57 pascal
 <h3>Scalar equations<a class="headerlink" href="#scalar-equations" title="Permalink to this headline">¶</a></h3>
 <p>Let’s first look at an example of a scalar function: one equation, one unknown.</p>
 <p>Find the root of this equation:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-ee19c081-ad24-4095-987e-de9775904795">
-<span class="eqno">(1)<a class="headerlink" href="#equation-ee19c081-ad24-4095-987e-de9775904795" title="Permalink to this equation">¶</a></span>\[\begin{equation}
-\cos(x) = x^3
-\end{equation}\]</div>
-<p>We need to create a Python function that returns <span class="math notranslate nohighlight">\(f(x) = 0\)</span>, so that the function returns zero when the input value of <span class="math notranslate nohighlight">\(x\)</span> is the (correct) root. Then, we can use the <code class="docutils literal notranslate"><span class="pre">root_scalar</span></code> function with some initial guesses.</p>
+<div class="math notranslate nohighlight">
+\[
+\cos(x) = x^3 \;.
+\]</div>
+<p>We need to create a Python function that returns <span class="math notranslate nohighlight">\(f(x) = 0\)</span>, so that the function returns zero when the input value of <span class="math notranslate nohighlight">\(x\)</span> is the (correct) root:</p>
+<div class="math notranslate nohighlight">
+\[
+\cos(x) - x^3 = 0 \;.
+\]</div>
+<p>Then, we can use the <code class="docutils literal notranslate"><span class="pre">root_scalar</span></code> function with some initial guesses.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -924,8 +929,8 @@ We can do this using the NumPy <a class="reference external" href="https://docs.
 </tbody>
 </table>
 <p>To find the work done by the piston to the ammonia, we can integrate pressure with respect to volume:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c332ce28-4c5a-4d65-8bae-3c2372fbaa8f">
-<span class="eqno">(2)<a class="headerlink" href="#equation-c332ce28-4c5a-4d65-8bae-3c2372fbaa8f" title="Permalink to this equation">¶</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-fbed7dc5-b824-490f-acc5-8aeea7440f29">
+<span class="eqno">(1)<a class="headerlink" href="#equation-fbed7dc5-b824-490f-acc5-8aeea7440f29" title="Permalink to this equation">¶</a></span>\[\begin{equation}
 W_{\text{in}} = -\int_{V_1}^{V_2} P \, dV
 \end{equation}\]</div>
 <div class="cell docutils container">
@@ -960,8 +965,8 @@ W_{\text{in}} = -\int_{V_1}^{V_2} P \, dV
 <p>We can also numerically integrate expressions/functions using the SciPy <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html"><code class="docutils literal notranslate"><span class="pre">quad()</span></code> function</a>, also in the <code class="docutils literal notranslate"><span class="pre">integrate</span></code> module.</p>
 <p>Let’s build on the previous example: first, let’s fit the compressor data to the polytropic form <span class="math notranslate nohighlight">\(P V^n = c\)</span>, where <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(n\)</span> are constants, then we can integrate the resulting function to calculate work.</p>
 <p>To fit the data, we need to rearrange the equation to the form <span class="math notranslate nohighlight">\(y = f(x)\)</span>:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-852d5d3a-6a8b-4298-86d5-eabada0913c6">
-<span class="eqno">(3)<a class="headerlink" href="#equation-852d5d3a-6a8b-4298-86d5-eabada0913c6" title="Permalink to this equation">¶</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-d05f5cc5-48ec-4004-84cd-b16861055132">
+<span class="eqno">(2)<a class="headerlink" href="#equation-d05f5cc5-48ec-4004-84cd-b16861055132" title="Permalink to this equation">¶</a></span>\[\begin{equation}
 P = c V^{-n}
 \end{equation}\]</div>
 <p>We’ll use the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html"><code class="docutils literal notranslate"><span class="pre">scipy.optimize.curve_fit()</span></code></a> function for that.</p>
@@ -1007,7 +1012,7 @@ P = c V^{-n}
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Parameters: n= 1.170, c= 194.200
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2860/1606160274.py:17: RuntimeWarning: overflow encountered in power
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2845/1606160274.py:17: RuntimeWarning: overflow encountered in power
   return c * np.power(V, -n)
 </pre></div>
 </div>
@@ -1060,8 +1065,8 @@ P = c V^{-n}
 <div class="section" id="initial-value-problems">
 <h3>Initial value problems<a class="headerlink" href="#initial-value-problems" title="Permalink to this headline">¶</a></h3>
 <p>In other words, we may have a system like</p>
-<div class="amsmath math notranslate nohighlight" id="equation-cd74056e-2fce-4f14-b542-b2350394f05c">
-<span class="eqno">(4)<a class="headerlink" href="#equation-cd74056e-2fce-4f14-b542-b2350394f05c" title="Permalink to this equation">¶</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-acc9576e-d096-4144-9a9e-33be0be0efe0">
+<span class="eqno">(3)<a class="headerlink" href="#equation-acc9576e-d096-4144-9a9e-33be0be0efe0" title="Permalink to this equation">¶</a></span>\[\begin{equation}
 \frac{d \mathbf{y}}{dt} = \mathbf{f} (t, \mathbf{y})
 \end{equation}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> is the vector of state variables, for which we should have the initial values (<span class="math notranslate nohighlight">\(\mathbf{y}(t=0)\)</span>). In this case, we can use the SciPy function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html"><code class="docutils literal notranslate"><span class="pre">solve_ivp()</span></code> function</a>, part of the <code class="docutils literal notranslate"><span class="pre">integrate</span></code> module.</p>
