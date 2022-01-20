@@ -1,26 +1,22 @@
-
-- file: intro
-
-- part: Getting started
+format: jb-book
+root: intro
+parts:
+- caption: Getting started
   chapters:
-    - file: solving-tips
-    
-- part: Fundamentals
+  - file: solving-tips
+- caption: Fundamentals
   chapters:
-    - file: fundamentals/thrust-rocket-equation
-    - file: fundamentals/staging
-    - file: fundamentals/ideal-rocket
-
-- part: Thermochemistry
+  - file: fundamentals/thrust-rocket-equation
+  - file: fundamentals/staging
+  - file: fundamentals/ideal-rocket
+- caption: Thermochemistry
   chapters:
-    - file: thermochemistry/thermochemistry
-    - file: thermochemistry/cea_cantera
-
-- part: Chemical propulsion
+  - file: thermochemistry/thermochemistry
+  - file: thermochemistry/cea_cantera
+- caption: Chemical propulsion
   chapters:
-    - file: chemical-rockets/hybrid-rockets
-
-- part: Reference
+  - file: chemical-rockets/hybrid-rockets
+- caption: Reference
   chapters:
   - file: zbibliography
   - file: contributing

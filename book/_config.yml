@@ -1,7 +1,7 @@
 # Book settings
 title: Rocket Propulsion Notes
 author: Kyle Niemeyer
-copyright: "2021"
+copyright: "2022"
 logo: "images/logo/logo.jpg"
 
 email: kyle.niemeyer@oregonstate.edu
@@ -11,11 +11,23 @@ description: >- # this means to ignore newlines until "baseurl:"
 
 execute_notebooks: auto
 
+bibtex_bibfiles:
+  - references.bib
+
+latex:
+  latex_documents:
+    targetname: book.tex
+
+sphinx:
+  config:
+    html_show_copyright: false
+    #mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
 parse:
   myst_enable_extensions:  # default extensions to enable in the myst parser. See https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
     - amsmath
     - colon_fence
-    # - deflist
+    - deflist
     - dollarmath
     # - html_admonition
     # - html_image
@@ -23,19 +35,19 @@ parse:
     # - replacements
     - smartquotes
     #- substitution
-
+    
 html:
   favicon: images/logo/favicon.ico
-  home_page_in_navbar: true
+  use_edit_page_button: true
   use_repository_button: true
-  extra_navbar: Powered by <a href="https://jupyterbook.org">Jupyter Book</a>  # Will be displayed underneath the left navbar.
+  use_issues_button: true
+  extra_footer: |
+    <p xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#" class="license-text"><a rel="cc:attributionURL" property="dct:title" href="https://github.com/kyleniemeyer/rocket-propulsion">Rocket Propulsion notes</a> by <span property="cc:attributionName">Kyle Niemeyer</span> is licensed under <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" /><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" /><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" /></a></p>
 
-#baseurl: "/computational-thermo" # the subpath of your site, e.g. /blog. If there is no subpath for your site, use an empty string ""
-#url: "https://kyleniemeyer.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 repository:
   url: https://github.com/kyleniemeyer/rocket-propulsion
-  branch: newbackend
+  branch: main
   path_to_book: "book"
 
 launch_buttons:
@@ -45,16 +57,3 @@ launch_buttons:
 binder:
   binderhub_url: "https://mybinder.org"
   text: "Launch binder"
-
-sphinx:
-  config:
-#    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-  extra_extensions: []
-
-bibtex_bibfiles:
-   - references.bib
-
-latex:
-  latex_documents:
-    targetname: book.tex
-  latex_engine: pdflatex  # one of 'pdflatex', 'xelatex' (recommended for unicode), 'luatex', 'platex', 'uplatex'
