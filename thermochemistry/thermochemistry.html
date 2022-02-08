@@ -294,6 +294,21 @@
    Adiabatic combustion
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rocket-problem">
+   Rocket problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#oxidizer-to-fuel-ratio">
+   Oxidizer-to-fuel ratio
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frozen-vs-shifting-equilibrium">
+   Frozen vs. shifting equilibrium
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -322,6 +337,21 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#adiabatic-combustion">
    Adiabatic combustion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rocket-problem">
+   Rocket problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#oxidizer-to-fuel-ratio">
+   Oxidizer-to-fuel ratio
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frozen-vs-shifting-equilibrium">
+   Frozen vs. shifting equilibrium
   </a>
  </li>
 </ul>
@@ -571,6 +601,488 @@ C_F =  1.884
 </div>
 <div class="section" id="adiabatic-combustion">
 <h2>Adiabatic combustion<a class="headerlink" href="#adiabatic-combustion" title="Permalink to this headline">¶</a></h2>
+<p>For chemical rockets, the temperature in the combustion chamber is unknown, and is a function of the propellant combination, oxidizer/fuel ratio, and chamber pressure.</p>
+<p>Consider the Space Shuttle Main Engine (SSME, also known as the RS-25),
+which uses liquid oxygen and liquid hydrogen as propellants, at an O/F ratio of 6.0 and
+with a chamber pressure of 2870 psia.
+The engine nozzle has an area ratio of 68.8.</p>
+<p>Find the chamber temperature, mole fractions of equilibrium products, specific heat ratio,
+average molecular weight, <span class="math notranslate nohighlight">\(c^*\)</span>, <span class="math notranslate nohighlight">\(C_F\)</span>, and specific impulse at sea level.</p>
+<p>In CEA, this is an <code class="docutils literal notranslate"><span class="pre">hp</span></code> type problem (assigned enthalpy and pressure), where the enthalpy of the initial mixture is known based on the propellants and combustion is assumed to be adiabatic.</p>
+<p>The CEA plaintext input file (with some comments removed) looks like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>prob hp
+ 
+# Pressure (1 value):
+p,psia= 2870
+  
+# Oxidizer/Fuel Wt. ratio (1 value):
+o/f= 6.0
+ 
+reac
+fuel H2(L)             wt%=100.0000
+oxid O2(L)             wt%=100.0000
+
+output short
+output siunits
+
+end
+</pre></div>
+</div>
+<p>and the output is (with the repeated input removed):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*******************************************************************************
+
+         NASA-GLENN CHEMICAL EQUILIBRIUM PROGRAM CEA2, FEBRUARY 5, 2004
+                   BY  BONNIE MCBRIDE AND SANFORD GORDON
+      REFS: NASA RP-1311, PART I, 1994 AND NASA RP-1311, PART II, 1996
+
+ *******************************************************************************
+
+         THERMODYNAMIC EQUILIBRIUM COMBUSTION PROPERTIES AT ASSIGNED
+
+                                   PRESSURES
+
+ CASE = _______________
+
+             REACTANT                    WT FRACTION      ENERGY      TEMP
+                                          (SEE NOTE)     KJ/KG-MOL      K  
+ FUEL        H2(L)                        1.0000000     -9012.000     20.270
+ OXIDANT     O2(L)                        1.0000000    -12979.000     90.170
+
+ O/F=    6.00000  %FUEL= 14.285714  R,EQ.RATIO= 1.322780  PHI,EQ.RATIO= 1.322780
+
+ THERMODYNAMIC PROPERTIES
+
+ P, BAR            197.88
+ T, K             3594.37
+ RHO, KG/CU M    9.0105 0
+ H, KJ/KG         -986.31
+ U, KJ/KG        -3182.40
+ G, KJ/KG        -62790.6
+ S, KJ/(KG)(K)    17.1948
+
+ M, (1/n)          13.608
+ (dLV/dLP)t      -1.01921
+ (dLV/dLT)p        1.3335
+ Cp, KJ/(KG)(K)    7.3661
+ GAMMAs            1.1472
+ SON VEL,M/SEC     1587.2
+
+ MOLE FRACTIONS
+
+ *H               0.02575
+ HO2              0.00003
+ *H2              0.24744
+ H2O              0.68555
+ H2O2             0.00002
+ *O               0.00207
+ *OH              0.03694
+ *O2              0.00220
+
+  * THERMODYNAMIC PROPERTIES FITTED TO 20000.K
+
+ NOTE. WEIGHT FRACTION OF FUEL IN TOTAL FUELS AND OF OXIDANT IN TOTAL OXIDANTS
+</pre></div>
+</div>
+<p>From the output, we see that the chamber temperature is 3594.37 K, the average molecular weight is 13.608 g/mol,
+and the specific heat ratio <span class="math notranslate nohighlight">\(\gamma\)</span> is 1.1472. We also see that the equilibrium mixture contains mostly
+H<span class="math notranslate nohighlight">\(_2\)</span>, H<span class="math notranslate nohighlight">\(_2\)</span>O, OH, H, and with some trace amounts of O, O<span class="math notranslate nohighlight">\(_2\)</span>, and H<span class="math notranslate nohighlight">\(_2\)</span>O<span class="math notranslate nohighlight">\(_2\)</span>.
+We can use this information to find the quantities of interest:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">area_ratio</span> <span class="o">=</span> <span class="mf">68.8</span>
+<span class="n">Pc</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">2870</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span>
+<span class="c1"># sea level</span>
+<span class="n">Pa</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;atm&#39;</span><span class="p">)</span>
+
+<span class="c1"># output from CEA</span>
+<span class="n">Tc</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">3594.37</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
+<span class="n">MW</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">13.608</span><span class="p">,</span> <span class="s1">&#39;kg/kmol&#39;</span><span class="p">)</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">1.1472</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial guesses for Pc / Pe</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">root_scalar</span><span class="p">(</span><span class="n">root_area_ratio</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x1</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">area_ratio</span><span class="p">,</span> <span class="n">gamma</span><span class="p">))</span>
+<span class="n">Pc_Pe</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">root</span>
+<span class="n">Pe</span> <span class="o">=</span> <span class="n">Pc</span> <span class="o">/</span> <span class="n">Pc_Pe</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exit pressure = </span><span class="si">{</span><span class="n">Pe</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;psi&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .2f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">cstar</span> <span class="o">=</span> <span class="n">get_cstar</span><span class="p">(</span><span class="n">Tc</span><span class="p">,</span> <span class="n">MW</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cstar = </span><span class="si">{</span><span class="n">cstar</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .1f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;at sea level:&#39;</span><span class="p">)</span>
+<span class="n">CF0</span> <span class="o">=</span> <span class="n">get_thrust_coeff</span><span class="p">(</span><span class="n">Pc_Pe</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+<span class="n">CF</span> <span class="o">=</span> <span class="n">CF0</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">Pc_Pe</span> <span class="o">+</span> <span class="n">Pa</span><span class="o">/</span><span class="n">Pc</span><span class="p">)</span> <span class="o">*</span> <span class="n">area_ratio</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;C_F = </span><span class="si">{</span><span class="n">CF</span><span class="o">.</span><span class="n">to_base_units</span><span class="p">()</span><span class="si">:</span><span class="s2"> .3f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">Isp</span> <span class="o">=</span> <span class="n">CF</span> <span class="o">*</span> <span class="n">cstar</span> <span class="o">/</span> <span class="n">g0</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Isp = </span><span class="si">{</span><span class="n">Isp</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .1f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Exit pressure = 3.81 psi
+Cstar = 2322.5 m/s
+at sea level:
+C_F = 2.350
+Isp = 556.5 s
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="rocket-problem">
+<h2>Rocket problem<a class="headerlink" href="#rocket-problem" title="Permalink to this headline">¶</a></h2>
+<p>CEA can also calculate performance quantities specific to rockets, such as the
+effective velocity (C-star, <span class="math notranslate nohighlight">\(c^*\)</span>), thrust coefficient (<span class="math notranslate nohighlight">\(C_F\)</span>), and specific
+impulse (<span class="math notranslate nohighlight">\(I_{\text{sp}}\)</span>).</p>
+<p>To do this, it has to make an assumption of whether to</p>
+<p>For the above example, but choosing the <code class="docutils literal notranslate"><span class="pre">rocket</span></code> problem and specifying a (supersonic) nozzle area ratio
+of 68.8, and leaving other options at their defaults, CEA provides this output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="o">*******************************************************************************</span>
+
+         <span class="n">NASA</span><span class="o">-</span><span class="n">GLENN</span> <span class="n">CHEMICAL</span> <span class="n">EQUILIBRIUM</span> <span class="n">PROGRAM</span> <span class="n">CEA2</span><span class="p">,</span> <span class="n">FEBRUARY</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2004</span>
+                   <span class="n">BY</span>  <span class="n">BONNIE</span> <span class="n">MCBRIDE</span> <span class="n">AND</span> <span class="n">SANFORD</span> <span class="n">GORDON</span>
+      <span class="n">REFS</span><span class="p">:</span> <span class="n">NASA</span> <span class="n">RP</span><span class="o">-</span><span class="mi">1311</span><span class="p">,</span> <span class="n">PART</span> <span class="n">I</span><span class="p">,</span> <span class="mi">1994</span> <span class="n">AND</span> <span class="n">NASA</span> <span class="n">RP</span><span class="o">-</span><span class="mi">1311</span><span class="p">,</span> <span class="n">PART</span> <span class="n">II</span><span class="p">,</span> <span class="mi">1996</span>
+
+ <span class="o">*******************************************************************************</span>
+
+
+
+  
+ <span class="c1">### CEA analysis performed on Tue 08-Feb-2022 11:04:54</span>
+  
+ <span class="c1"># Problem Type: &quot;Rocket&quot; (Infinite Area Combustor)</span>
+  
+ <span class="n">prob</span> <span class="n">case</span><span class="o">=</span><span class="n">_______________8942</span> <span class="n">ro</span>
+  
+ <span class="c1"># Pressure (1 value):</span>
+ <span class="n">p</span><span class="p">,</span><span class="n">psia</span><span class="o">=</span> <span class="mi">2870</span>
+ <span class="c1"># Supersonic Area Ratio (1 value):</span>
+ <span class="n">supar</span><span class="o">=</span> <span class="mf">68.8</span>
+  
+ <span class="c1"># Oxidizer/Fuel Wt. ratio (1 value):</span>
+ <span class="n">o</span><span class="o">/</span><span class="n">f</span><span class="o">=</span> <span class="mf">6.0</span>
+  
+ <span class="c1"># You selected the following fuels and oxidizers:</span>
+ <span class="n">reac</span>
+ <span class="n">fuel</span> <span class="n">H2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>             <span class="n">wt</span><span class="o">%=</span><span class="mf">100.0000</span>
+ <span class="n">oxid</span> <span class="n">O2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>             <span class="n">wt</span><span class="o">%=</span><span class="mf">100.0000</span>
+  
+ <span class="c1"># You selected these options for output:</span>
+ <span class="c1"># short version of output</span>
+ <span class="n">output</span> <span class="n">short</span>
+ <span class="c1"># Proportions of any products will be expressed as Mole Fractions.</span>
+ <span class="c1"># Heat will be expressed as siunits</span>
+ <span class="n">output</span> <span class="n">siunits</span>
+  
+ <span class="c1"># Input prepared by this script:/var/www/sites/cearun.grc.nasa.gov/cgi-bin/CEARU</span>
+ <span class="n">N</span><span class="o">/</span><span class="n">prepareInputFile</span><span class="o">.</span><span class="n">cgi</span>
+  
+ <span class="c1">### IMPORTANT:  The following line is the end of your CEA input file!</span>
+ <span class="n">end</span>
+
+
+
+           <span class="n">THEORETICAL</span> <span class="n">ROCKET</span> <span class="n">PERFORMANCE</span> <span class="n">ASSUMING</span> <span class="n">FROZEN</span> <span class="n">COMPOSITION</span>
+
+ <span class="n">Pin</span> <span class="o">=</span>  <span class="mf">2870.0</span> <span class="n">PSIA</span>
+ <span class="n">CASE</span> <span class="o">=</span> <span class="n">_______________</span>
+
+             <span class="n">REACTANT</span>                    <span class="n">WT</span> <span class="n">FRACTION</span>      <span class="n">ENERGY</span>      <span class="n">TEMP</span>
+                                          <span class="p">(</span><span class="n">SEE</span> <span class="n">NOTE</span><span class="p">)</span>     <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span><span class="o">-</span><span class="n">MOL</span>      <span class="n">K</span>  
+ <span class="n">FUEL</span>        <span class="n">H2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>                        <span class="mf">1.0000000</span>     <span class="o">-</span><span class="mf">9012.000</span>     <span class="mf">20.270</span>
+ <span class="n">OXIDANT</span>     <span class="n">O2</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>                        <span class="mf">1.0000000</span>    <span class="o">-</span><span class="mf">12979.000</span>     <span class="mf">90.170</span>
+
+ <span class="n">O</span><span class="o">/</span><span class="n">F</span><span class="o">=</span>    <span class="mf">6.00000</span>  <span class="o">%</span><span class="n">FUEL</span><span class="o">=</span> <span class="mf">14.285714</span>  <span class="n">R</span><span class="p">,</span><span class="n">EQ</span><span class="o">.</span><span class="n">RATIO</span><span class="o">=</span> <span class="mf">1.322780</span>  <span class="n">PHI</span><span class="p">,</span><span class="n">EQ</span><span class="o">.</span><span class="n">RATIO</span><span class="o">=</span> <span class="mf">1.322780</span>
+
+                 <span class="n">CHAMBER</span>   <span class="n">THROAT</span>     <span class="n">EXIT</span>
+ <span class="n">Pinf</span><span class="o">/</span><span class="n">P</span>            <span class="mf">1.0000</span>   <span class="mf">1.7688</span>  <span class="mf">1110.26</span>
+ <span class="n">P</span><span class="p">,</span> <span class="n">BAR</span>            <span class="mf">197.88</span>   <span class="mf">111.87</span>  <span class="mf">0.17823</span>
+ <span class="n">T</span><span class="p">,</span> <span class="n">K</span>             <span class="mf">3594.37</span>  <span class="mf">3276.93</span>   <span class="mf">980.79</span>
+ <span class="n">RHO</span><span class="p">,</span> <span class="n">KG</span><span class="o">/</span><span class="n">CU</span> <span class="n">M</span>    <span class="mf">9.0105</span> <span class="mi">0</span> <span class="mf">5.5875</span> <span class="mi">0</span> <span class="mf">2.9742</span><span class="o">-</span><span class="mi">2</span>
+ <span class="n">H</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span>         <span class="o">-</span><span class="mf">986.31</span> <span class="o">-</span><span class="mf">2182.76</span> <span class="o">-</span><span class="mf">9907.46</span>
+ <span class="n">U</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span>        <span class="o">-</span><span class="mf">3182.40</span> <span class="o">-</span><span class="mf">4184.90</span> <span class="o">-</span><span class="mf">10506.7</span>
+ <span class="n">G</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="n">KG</span>        <span class="o">-</span><span class="mf">62790.6</span> <span class="o">-</span><span class="mf">58528.7</span> <span class="o">-</span><span class="mf">26771.8</span>
+ <span class="n">S</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="p">(</span><span class="n">KG</span><span class="p">)(</span><span class="n">K</span><span class="p">)</span>    <span class="mf">17.1948</span>  <span class="mf">17.1948</span>  <span class="mf">17.1948</span>
+
+ <span class="n">M</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>          <span class="mf">13.608</span>   <span class="mf">13.608</span>   <span class="mf">13.608</span>
+ <span class="n">Cp</span><span class="p">,</span> <span class="n">KJ</span><span class="o">/</span><span class="p">(</span><span class="n">KG</span><span class="p">)(</span><span class="n">K</span><span class="p">)</span>    <span class="mf">3.7951</span>   <span class="mf">3.7416</span>   <span class="mf">2.7469</span>
+ <span class="n">GAMMAs</span>            <span class="mf">1.1919</span>   <span class="mf">1.1952</span>   <span class="mf">1.2861</span>
+ <span class="n">SON</span> <span class="n">VEL</span><span class="p">,</span><span class="n">M</span><span class="o">/</span><span class="n">SEC</span>     <span class="mf">1617.9</span>   <span class="mf">1546.9</span>    <span class="mf">877.9</span>
+ <span class="n">MACH</span> <span class="n">NUMBER</span>        <span class="mf">0.000</span>    <span class="mf">1.000</span>    <span class="mf">4.812</span>
+
+ <span class="n">PERFORMANCE</span> <span class="n">PARAMETERS</span>
+
+ <span class="n">Ae</span><span class="o">/</span><span class="n">At</span>                      <span class="mf">1.0000</span>   <span class="mf">68.800</span>
+ <span class="n">CSTAR</span><span class="p">,</span> <span class="n">M</span><span class="o">/</span><span class="n">SEC</span>               <span class="mf">2289.4</span>   <span class="mf">2289.4</span>
+ <span class="n">CF</span>                         <span class="mf">0.6757</span>   <span class="mf">1.8450</span>
+ <span class="n">Ivac</span><span class="p">,</span> <span class="n">M</span><span class="o">/</span><span class="n">SEC</span>                <span class="mf">2841.2</span>   <span class="mf">4365.9</span>
+ <span class="n">Isp</span><span class="p">,</span> <span class="n">M</span><span class="o">/</span><span class="n">SEC</span>                 <span class="mf">1546.9</span>   <span class="mf">4224.0</span>
+
+ <span class="n">MOLE</span> <span class="n">FRACTIONS</span>
+
+ <span class="o">*</span><span class="n">H</span>              <span class="mf">0.02575</span>   <span class="n">HO2</span>             <span class="mf">0.00003</span>   <span class="o">*</span><span class="n">H2</span>             <span class="mf">0.24744</span>
+ <span class="n">H2O</span>             <span class="mf">0.68555</span>   <span class="n">H2O2</span>            <span class="mf">0.00002</span>   <span class="o">*</span><span class="n">O</span>              <span class="mf">0.00207</span>
+ <span class="o">*</span><span class="n">OH</span>             <span class="mf">0.03694</span>   <span class="o">*</span><span class="n">O2</span>             <span class="mf">0.00220</span>
+
+  <span class="o">*</span> <span class="n">THERMODYNAMIC</span> <span class="n">PROPERTIES</span> <span class="n">FITTED</span> <span class="n">TO</span> <span class="mf">20000.</span><span class="n">K</span>
+
+ <span class="n">NOTE</span><span class="o">.</span> <span class="n">WEIGHT</span> <span class="n">FRACTION</span> <span class="n">OF</span> <span class="n">FUEL</span> <span class="n">IN</span> <span class="n">TOTAL</span> <span class="n">FUELS</span> <span class="n">AND</span> <span class="n">OF</span> <span class="n">OXIDANT</span> <span class="n">IN</span> <span class="n">TOTAL</span> <span class="n">OXIDANTS</span>
+</pre></div>
+</div>
+<p>The key properties include:</p>
+<ul class="simple">
+<li><p>C-star of 2289.4 m/s (based on combustion chamber conditions)</p></li>
+<li><p>throat pressure of 111.87 bar and temperature of 3276.93 K</p></li>
+<li><p>exit pressure of 0.17823 bar, temperature of 980.79 K</p></li>
+<li><p>at the nozzle exit, thrust coefficient = 1.8450, Isp = 4224.0 m/s</p></li>
+</ul>
+<p>The reported specific impulse <span class="math notranslate nohighlight">\(I_{\textrm{sp}}\)</span> assumes that the ambient pressure is the same as the exit pressure, since CEA does not know the actual ambient pressure. (It also reports the specific impulse in vacuum, <span class="math notranslate nohighlight">\(I_{\textrm{vac}}\)</span>.)
+The value is given in m/s and needs to be divided by the gravity constant to get our usual units of seconds:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Isp_cea</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">4224.0</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="n">Isp</span> <span class="o">=</span> <span class="n">Isp_cea</span> <span class="o">/</span> <span class="n">g0</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Isp = </span><span class="si">{</span><span class="n">Isp</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .1f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Isp = 430.7 s
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next thing to note is that CEA defaulted to assuming <strong>frozen</strong> mixture composition from the combustion chamber and throughout the nozzle; in other words, it is assuming that the equilibrium composition in the combustion chamber (based on chemical equilibrium) is the fixed composition throughout the whole nozzle.</p>
+<p>However, in reality, the mixture composition will change because the temperature and pressure change throughout the nozzle. In the real system, these changes will be driven by chemical reactions occuring, but it is extremely challening to model these time-dependent effects.
+Instead, an approximate <strong>shifting equilibrium</strong> approach can be taken, based on the assumption that the chemical reactions occur infinitely fast, and, therefore, at every location in the nozzle, the mixture composition is the equilibrium composition based on the local temperature and pressure.</p>
+<p>CEA can use this approximation by selecting the <code class="docutils literal notranslate"><span class="pre">Equilibrium</span></code> rocket problem option. This produces:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>              THEORETICAL ROCKET PERFORMANCE ASSUMING EQUILIBRIUM
+
+           COMPOSITION DURING EXPANSION FROM INFINITE AREA COMBUSTOR
+
+ Pin =  2870.0 PSIA
+ CASE = _______________
+
+             REACTANT                    WT FRACTION      ENERGY      TEMP
+                                          (SEE NOTE)     KJ/KG-MOL      K  
+ FUEL        H2(L)                        1.0000000     -9012.000     20.270
+ OXIDANT     O2(L)                        1.0000000    -12979.000     90.170
+
+ O/F=    6.00000  %FUEL= 14.285714  R,EQ.RATIO= 1.322780  PHI,EQ.RATIO= 1.322780
+
+                 CHAMBER   THROAT     EXIT
+ Pinf/P            1.0000   1.7401   960.27
+ P, BAR            197.88   113.71  0.20607
+ T, K             3594.37  3378.30  1234.47
+ RHO, KG/CU M    9.0105 0 5.5605 0 2.8330-2
+ H, KJ/KG         -986.31 -2160.57 -10543.0
+ U, KJ/KG        -3182.40 -4205.62 -11270.4
+ G, KJ/KG        -62790.6 -60249.7 -31769.4
+ S, KJ/(KG)(K)    17.1948  17.1948  17.1948
+
+ M, (1/n)          13.608   13.735   14.111
+ (dLV/dLP)t      -1.01921 -1.01432 -1.00000
+ (dLV/dLT)p        1.3335   1.2644   1.0000
+ Cp, KJ/(KG)(K)    7.3661   6.7421   2.9102
+ GAMMAs            1.1472   1.1484   1.2539
+ SON VEL,M/SEC     1587.2   1532.5    955.0
+ MACH NUMBER        0.000    1.000    4.578
+
+ PERFORMANCE PARAMETERS
+
+ Ae/At                      1.0000   68.800
+ CSTAR, M/SEC               2322.1   2322.1
+ CF                         0.6599   1.8827
+ Ivac, M/SEC                2867.0   4538.3
+ Isp, M/SEC                 1532.5   4371.9
+
+
+ MOLE FRACTIONS
+
+ *H               0.02575  0.02063  0.00000
+ HO2              0.00003  0.00002  0.00000
+ *H2              0.24744  0.24496  0.24402
+ H2O              0.68555  0.70439  0.75598
+ H2O2             0.00002  0.00001  0.00000
+ *O               0.00207  0.00126  0.00000
+ *OH              0.03694  0.02734  0.00000
+ *O2              0.00220  0.00140  0.00000
+</pre></div>
+</div>
+<p>With the key properties:</p>
+<ul class="simple">
+<li><p>C-star of 2322.1 m/s (based on combustion chamber conditions)</p></li>
+<li><p>exit pressure of 0.20607</p></li>
+<li><p>at the nozzle exit, thrust coefficient = 1.8827, Isp = 4371.9 m/s</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Isp_cea</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">4371.9</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="n">Isp_eq</span> <span class="o">=</span> <span class="n">Isp_cea</span> <span class="o">/</span> <span class="n">g0</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Isp (equilibrium) = </span><span class="si">{</span><span class="n">Isp_eq</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .1f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Difference: </span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Isp_eq</span> <span class="o">-</span> <span class="n">Isp</span><span class="p">)</span><span class="o">/</span><span class="n">Isp</span><span class="si">:</span><span class="s2"> .2f~P</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Isp (equilibrium) = 445.8 s
+Difference: 3.50%
+</pre></div>
+</div>
+</div>
+</div>
+<p>The shifting equilibrium assumption typically overpredicts the real performance by 1–4%,
+while the frozen composition assumption underpredicts performance by 1–4%.</p>
+</div>
+<div class="section" id="oxidizer-to-fuel-ratio">
+<h2>Oxidizer-to-fuel ratio<a class="headerlink" href="#oxidizer-to-fuel-ratio" title="Permalink to this headline">¶</a></h2>
+<p>The thermochemical performance of a rocket, represented by <span class="math notranslate nohighlight">\(c^*\)</span>, is a strong function of the oxidizer-to-fuel ratio, or <span class="math notranslate nohighlight">\(r = \)</span> O/F, and thus the overall performance (<span class="math notranslate nohighlight">\(I_{\textrm{sp}}\)</span>) also depends on the O/F ratio.
+For liquid rockets, this ratio can be controlled directly since the propellants are injected separately.
+CEA can help us identify the optimal O/F ratio.</p>
+<p>For example, for the SSME considered above using liquid hydrogen and liquid oxygen, we can have CEA sweep over a range of O/F values, from 2 to 8 in increments of 0.25. This gives an input file of</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> prob case=_______________8942 ro equilibrium
+  
+ # Pressure (1 value):
+ p,psia= 2870
+ # Supersonic Area Ratio (1 value):
+ supar= 68.8
+  
+ # Oxidizer/Fuel Wt. ratio (25 values):
+ o/f= 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5, 4.75, 5, 5.25, 5.5, 5
+ .75, 6, 6.25, 6.5, 6.75, 7, 7.25, 7.5, 7.75, 8
+  
+ reac
+ fuel H2(L)             wt%=100.0000
+ oxid O2(L)             wt%=100.0000
+  
+ output short
+ # Proportions of any products will be expressed as Mole Fractions.
+ # Heat will be expressed as siunits
+ output siunits
+  
+ end
+</pre></div>
+</div>
+<p>The output of CEA will be quite long, since there are 25 separate cases; the output is in the file <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">cea_OF_ratio_out.txt</span></code></span>. We can use Python to extract the desired information:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mixture_ratios</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">8.1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;cea_OF_ratio_out.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+<span class="n">cstars</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">specific_impulses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">specific_impulses_vac</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+    <span class="c1"># ignore blank lines</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">continue</span>
+    
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CSTAR,&#39;</span><span class="p">:</span>
+        <span class="n">cstars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Isp,&#39;</span><span class="p">:</span>
+        <span class="n">specific_impulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Ivac,&#39;</span><span class="p">:</span>
+        <span class="n">specific_impulses_vac</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+<span class="n">cstars</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cstars</span><span class="p">),</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="n">specific_impulses</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">specific_impulses</span><span class="p">),</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">g0</span>
+<span class="n">specific_impulses_vac</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">specific_impulses_vac</span><span class="p">),</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">g0</span>
+
+<span class="c1"># just checking that things line up</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cstars</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">specific_impulses</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">specific_impulses_vac</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">,</span> <span class="n">to_si</span><span class="p">(</span><span class="n">cstars</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$c^*$ (m/s)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">,</span> <span class="n">to_si</span><span class="p">(</span><span class="n">specific_impulses</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$I_{\mathrm</span><span class="si">{sp}</span><span class="s1">}$ (s)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">,</span> <span class="n">to_si</span><span class="p">(</span><span class="n">specific_impulses_vac</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;O/F ratio&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$I_{\mathrm</span><span class="si">{vac}</span><span class="s1">}$ (s)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/thermochemistry_22_0.png" src="../_images/thermochemistry_22_0.png" />
+</div>
+</div>
+<p>This allows us to determine the mixture ratio for optimal performance, although in practice something slightly off-optimal might be used for other reasons (e.g., combustion stability, reducing peak temperature).</p>
+</div>
+<div class="section" id="frozen-vs-shifting-equilibrium">
+<h2>Frozen vs. shifting equilibrium<a class="headerlink" href="#frozen-vs-shifting-equilibrium" title="Permalink to this headline">¶</a></h2>
+<p>We have already seen how assuming the mixture composition either remains frozen from the combustion chamber or follows a shifting equilibrium model leads to different calculations of performance.
+Frozen equilibrium underpredicts, while shifting equilibrium overpredicts.
+We can use these together to estimate the true actual performance as somewhere in between, such as 40% of the difference between the two results.</p>
+<p>We already have results for shifting equilibrum, and can similarly extract the specific impulse for frozen equilibrium calculations saved in <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">CEA_OF_ratio_frozen_out.txt</span></code></span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;CEA_OF_ratio_frozen_out.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+<span class="n">specific_impulses_frozen</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+    <span class="c1"># ignore blank lines</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">continue</span>
+    
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Isp,&#39;</span><span class="p">:</span>
+        <span class="n">specific_impulses_frozen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+<span class="n">specific_impulses_frozen</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">specific_impulses_frozen</span><span class="p">),</span> <span class="s1">&#39;m/s&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">g0</span>
+
+<span class="c1"># just checking that things line up</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">specific_impulses_frozen</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">specific_impulses_act</span> <span class="o">=</span> <span class="n">specific_impulses_frozen</span> <span class="o">+</span> <span class="mf">0.4</span><span class="o">*</span><span class="p">(</span><span class="n">specific_impulses</span> <span class="o">-</span> <span class="n">specific_impulses_frozen</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">,</span> <span class="n">to_si</span><span class="p">(</span><span class="n">specific_impulses</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Shifting equilibrium&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">,</span> <span class="n">to_si</span><span class="p">(</span><span class="n">specific_impulses_frozen</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Frozen&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mixture_ratios</span><span class="p">,</span> <span class="n">to_si</span><span class="p">(</span><span class="n">specific_impulses_act</span><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$I_{\mathrm</span><span class="si">{sp}</span><span class="s1">}$ (s)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Mixture ratio&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/thermochemistry_26_0.png" src="../_images/thermochemistry_26_0.png" />
+</div>
+</div>
 </div>
 </div>
 
