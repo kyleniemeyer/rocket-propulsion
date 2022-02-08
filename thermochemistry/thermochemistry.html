@@ -42,6 +42,8 @@
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe"
@@ -277,6 +279,24 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fixed-temperature-and-pressure">
+   Fixed temperature and pressure
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adiabatic-combustion">
+   Adiabatic combustion
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -289,6 +309,24 @@
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fixed-temperature-and-pressure">
+   Fixed temperature and pressure
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adiabatic-combustion">
+   Adiabatic combustion
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -304,7 +342,8 @@
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">cantera</span> <span class="k">as</span> <span class="nn">ct</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">root_scalar</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">constants</span>
 
 <span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UnitRegistry</span>
 <span class="n">ureg</span> <span class="o">=</span> <span class="n">UnitRegistry</span><span class="p">()</span>
@@ -319,388 +358,219 @@
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># these lines are only for helping improve the display</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
-<span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">150</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">150</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2898/2082071481.py:3: DeprecationWarning: `set_matplotlib_formats` is deprecated since IPython 7.23, directly use `matplotlib_inline.backend_inline.set_matplotlib_formats()`
-  set_matplotlib_formats(&#39;pdf&#39;, &#39;png&#39;)
+<span class="kn">import</span> <span class="nn">matplotlib_inline.backend_inline</span>
+<span class="n">matplotlib_inline</span><span class="o">.</span><span class="n">backend_inline</span><span class="o">.</span><span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">300</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#full_species = {S.name: S for S in ct.Species.listFromFile(&#39;nasa_gas.cti&#39;)}</span>
-
-<span class="c1">#species = [full_species[S] for S in (</span>
-<span class="c1">#    &#39;N2H4&#39;, &#39;N2&#39;, &#39;H2&#39;, &#39;H&#39;, &#39;N&#39;, &#39;NH&#39;</span>
-<span class="c1">#    )]</span>
-<span class="c1">#gas = ct.Solution(thermo=&#39;IdealGas&#39;, species=species)</span>
-
-<span class="c1">#gas = ct.Solution(&#39;n2h4.yaml&#39;)</span>
-<span class="n">gas</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;nasa_n2h4.cti&#39;</span><span class="p">)</span>
-
-<span class="n">temperature</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
-<span class="n">pressure</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span>
-
-<span class="n">gas</span><span class="o">.</span><span class="n">TPX</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure</span><span class="p">),</span> <span class="s1">&#39;N2H4:1.0&#39;</span>
-<span class="c1">#gas.equilibrate(&#39;TP&#39;)</span>
-<span class="c1">#gas()</span>
-<span class="c1">#print(Q_(gas.P, &#39;Pa&#39;).to(&#39;bar&#39;))</span>
-
-<span class="c1"># based on example https://cantera.org/examples/python/thermo/sound_speed.py.html</span>
-
-<span class="c1"># set the gas to equilibrium at its current T and P</span>
-<span class="n">rtol</span><span class="o">=</span><span class="mf">1.0e-6</span>
-<span class="n">maxiter</span><span class="o">=</span><span class="mi">5000</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;TP&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">)</span>
-
-<span class="c1"># save properties</span>
-<span class="n">X0</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">X</span>
-<span class="n">s0</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">s</span>
-<span class="n">p0</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">P</span>
-<span class="n">h0</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">h</span>
-<span class="n">T0</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">T</span>
-<span class="n">r0</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">density</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gamma=cp/cv: </span><span class="si">{</span><span class="n">gas</span><span class="o">.</span><span class="n">cp</span><span class="o">/</span><span class="n">gas</span><span class="o">.</span><span class="n">cv</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="c1"># perturb the pressure</span>
-<span class="n">p1</span> <span class="o">=</span> <span class="n">p0</span><span class="o">*</span><span class="mf">1.0001</span>
-
-<span class="c1"># set the gas to a state with the same entropy and composition but</span>
-<span class="c1"># the perturbed pressure</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">SP</span> <span class="o">=</span> <span class="n">s0</span><span class="p">,</span> <span class="n">p1</span>
-
-<span class="c1"># frozen sound speed</span>
-<span class="n">afrozen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">density</span> <span class="o">-</span> <span class="n">r0</span><span class="p">))</span>
-<span class="n">gamma_frozen</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p0</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">density</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">r0</span><span class="p">))</span>
-
-<span class="c1"># now equilibrate the gas holding S and P constant</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;SP&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">)</span>
-
-<span class="c1"># equilibrium sound speed</span>
-<span class="n">aequil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">density</span> <span class="o">-</span> <span class="n">r0</span><span class="p">))</span>
-<span class="n">gamma_equil</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p0</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">density</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">r0</span><span class="p">))</span>
-
-<span class="c1"># compute the frozen sound speed using the ideal gas expression as a check</span>
-<span class="n">gamma</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">cp</span><span class="o">/</span><span class="n">gas</span><span class="o">.</span><span class="n">cv</span>
-<span class="n">afrozen2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span>
-                   <span class="n">gas</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
-
-<span class="n">gas</span><span class="o">.</span><span class="n">TPX</span> <span class="o">=</span> <span class="n">T0</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">X0</span>
-<span class="n">T1</span> <span class="o">=</span> <span class="n">T0</span> <span class="o">*</span> <span class="mf">1.0001</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">TP</span> <span class="o">=</span> <span class="n">T1</span><span class="p">,</span> <span class="n">p0</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;SP&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">)</span>
-<span class="n">cp_equil</span> <span class="o">=</span> <span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">h</span> <span class="o">-</span> <span class="n">h0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">T0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;C_p,equil = </span><span class="si">{</span><span class="n">cp_equil</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">gamma_frozen</span><span class="p">,</span> <span class="n">gamma_equil</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">afrozen</span><span class="p">,</span> <span class="n">aequil</span><span class="p">,</span> <span class="n">afrozen2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>gamma=cp/cv: 1.4919307570740907
-C_p,equil = 11090.553117196094
-1.4919186582180366 1.2550230338650459 1.4919329172682865
-3048.5785541452924 2796.0780629278806 3048.5989686092894
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define some constants</span>
+<span class="n">Ru</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="s1">&#39;J/(K*mol)&#39;</span><span class="p">)</span>
+<span class="n">g0</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;m/s^2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>The thermochemical performance of a rocket is primarily represented using the characteristic velocity:</p>
+<div class="math notranslate nohighlight" id="equation-eq-cstar">
+<span class="eqno">(6)<a class="headerlink" href="#equation-eq-cstar" title="Permalink to this equation">¶</a></span>\[
+c^* = \frac{p_c A_t}{\dot{m}} = \sqrt{\frac{\mathcal{R}_u T_c}{\textrm{MW} \, \gamma} \left( \frac{\gamma + 1}{2} \right)^{\frac{\gamma+1}{\gamma-1}} } \;,
+\]</div>
+<p>which depends on the (combustion) chamber temperature <span class="math notranslate nohighlight">\(T_c\)</span>, gas molecular weight <span class="math notranslate nohighlight">\(\textrm{MW}\)</span>, and gas specific heat ratio <span class="math notranslate nohighlight">\(\gamma\)</span>.
+The thrust coefficient <span class="math notranslate nohighlight">\(C_F\)</span> mainly represents the performance of the nozzle, but it also depends on the specific heat ratio <span class="math notranslate nohighlight">\(\gamma\)</span>.</p>
+<p>Up to this point, we have been provided or assumed these values, but they are actually a function of</p>
+<ul class="simple">
+<li><p>propellant(s)</p></li>
+<li><p>ratio of oxidizer to fuel</p></li>
+</ul>
+<p>Given a propellant or combination of propellants and heating (due to combustion, nuclear reactions, or electricity),
+the gas in the chamber and moving into the nozzle will form a mixture of chemical species at the state of chemical equilibrium. At this state, the forward and reverse rates of all chemical reactions are balanced, and the species remain at a fixed composition (as long as the temperature and/or pressure remain constant).</p>
+<p>The amounts of the chemical species at the equilibrium are unknown, but can be determined based on the initial conditions using methods based on <a class="reference external" href="https://kyleniemeyer.github.io/computational-thermo/content/chemical-equilibrium/equilibrium-constant.html">reaction equilibrium constants</a> or the <a class="reference external" href="https://kyleniemeyer.github.io/computational-thermo/content/chemical-equilibrium/equilibrium-alternative-methods.html">minimization of Gibbs free energy</a>.
+If the temperature is not known/fixed, then it is also an unknown and must be found.</p>
+<p>Fortunately, we can use software tools such as NASA’s <a class="reference external" href="https://cearun.grc.nasa.gov">CEA</a> or <a class="reference external" href="https://cantera.org">Cantera</a> to find the equilibrium state for us. We’ll focus on CEA here.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Gets thermo derivatives based on shifting equilibrium.</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_area_ratio</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates area ratio based on specific heat ratio and pressure ratio.</span>
+<span class="sd">    pressure ratio: chamber / exit</span>
+<span class="sd">    area ratio: exit / throat</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1"># unknowns for system with no condensed species:</span>
-    <span class="c1"># dpi_i_dlogT_P (# elements)</span>
-    <span class="c1"># dlogn_dlogT_P</span>
-    <span class="c1"># dpi_i_dlogP_T (# elements)</span>
-    <span class="c1"># dlogn_dlogP_T</span>
-    <span class="c1"># total unknowns: 2*n_elements + 2</span>
-
-    <span class="n">num_var</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span> <span class="o">+</span> <span class="mi">2</span>
-
-    <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_var</span><span class="p">,</span> <span class="n">num_var</span><span class="p">))</span>
-    <span class="n">right_hand_side</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_var</span><span class="p">)</span>
-
-    <span class="n">tot_moles</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">gas</span><span class="o">.</span><span class="n">mean_molecular_weight</span>
-    <span class="n">moles</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">X</span> <span class="o">*</span> <span class="n">tot_moles</span>
-
-    <span class="n">condensed</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="c1"># indices</span>
-    <span class="n">idx_dpi_dlogT_P</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">idx_dlogn_dlogT_P</span> <span class="o">=</span> <span class="n">idx_dpi_dlogT_P</span> <span class="o">+</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span>
-    <span class="n">idx_dpi_dlogP_T</span> <span class="o">=</span> <span class="n">idx_dlogn_dlogT_P</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">idx_dlogn_dlogP_T</span> <span class="o">=</span> <span class="n">idx_dpi_dlogP_T</span> <span class="o">+</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span>
-
-    <span class="c1"># construct matrix of elemental stoichiometric coefficients</span>
-    <span class="n">stoich_coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_species</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">element_names</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">sp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">species_names</span><span class="p">):</span>
-            <span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
-
-    <span class="c1"># equations for derivatives with respect to temperature</span>
-    <span class="c1"># first n_elements equations</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">):</span>
-            <span class="n">coeff_matrix</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span><span class="p">)</span>
-        <span class="n">coeff_matrix</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span><span class="p">)</span>
-        <span class="n">right_hand_side</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="p">)</span>
-
-    <span class="c1"># skip equation relevant to condensed species</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">):</span>
-        <span class="n">coeff_matrix</span><span class="p">[</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">moles</span><span class="p">)</span>
-    <span class="n">right_hand_side</span><span class="p">[</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="p">)</span>
-
-    <span class="c1"># equations for derivatives with respect to pressure</span>
-
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">):</span>
-            <span class="n">coeff_matrix</span><span class="p">[</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">k</span><span class="p">,</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span><span class="p">)</span>
-        <span class="n">coeff_matrix</span><span class="p">[</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span><span class="p">)</span>
-        <span class="n">right_hand_side</span><span class="p">[</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">):</span>
-        <span class="n">coeff_matrix</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">moles</span><span class="p">)</span>
-    <span class="n">right_hand_side</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">moles</span><span class="p">)</span>
-    
-    <span class="n">derivs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">coeff_matrix</span><span class="p">,</span> <span class="n">right_hand_side</span><span class="p">)</span>
-
-    <span class="n">dpi_dlogT_P</span> <span class="o">=</span> <span class="n">derivs</span><span class="p">[</span><span class="n">idx_dpi_dlogT_P</span> <span class="p">:</span> <span class="n">idx_dpi_dlogT_P</span> <span class="o">+</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">]</span>
-    <span class="n">dlogn_dlogT_P</span> <span class="o">=</span> <span class="n">derivs</span><span class="p">[</span><span class="n">idx_dlogn_dlogT_P</span><span class="p">]</span>
-    <span class="n">dpi_dlogP_T</span> <span class="o">=</span> <span class="n">derivs</span><span class="p">[</span><span class="n">idx_dpi_dlogP_T</span><span class="p">]</span>
-    <span class="n">dlogn_dlogP_T</span> <span class="o">=</span> <span class="n">derivs</span><span class="p">[</span><span class="n">idx_dlogn_dlogP_T</span><span class="p">]</span>
-
-    <span class="c1"># dpi_dlogP_T is not used</span>
-    
-    <span class="k">return</span> <span class="n">dpi_dlogT_P</span><span class="p">,</span> <span class="n">dlogn_dlogT_P</span><span class="p">,</span> <span class="n">dlogn_dlogP_T</span>
-
-<span class="k">def</span> <span class="nf">get_thermo_properties</span><span class="p">(</span><span class="n">gas</span><span class="p">,</span> <span class="n">dpi_dlogT_P</span><span class="p">,</span> <span class="n">dlogn_dlogT_P</span><span class="p">,</span> <span class="n">dlogn_dlogP_T</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Calculates specific heats, volume derivatives, and specific heat ratio.</span>
-<span class="sd">    </span>
-<span class="sd">    Based on shifting equilibrium for mixtures.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    
-    <span class="n">tot_moles</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">gas</span><span class="o">.</span><span class="n">mean_molecular_weight</span>
-    <span class="n">moles</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">X</span> <span class="o">*</span> <span class="n">tot_moles</span>
-    
-    <span class="c1"># construct matrix of elemental stoichiometric coefficients</span>
-    <span class="n">stoich_coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_species</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">element_names</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">sp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">species_names</span><span class="p">):</span>
-            <span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">gas</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
-    
-    <span class="n">spec_heat_p</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">dpi_dlogT_P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> 
-                <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stoich_coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="p">)</span> 
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gas</span><span class="o">.</span><span class="n">n_elements</span><span class="p">)</span>
-                <span class="p">])</span> <span class="o">+</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="p">)</span> <span class="o">*</span> <span class="n">dlogn_dlogT_P</span> <span class="o">+</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_cp_R</span><span class="p">)</span> <span class="o">+</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">moles</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">standard_enthalpies_RT</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="p">)</span>
-    
-    <span class="n">dlogV_dlogT_P</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">dlogn_dlogT_P</span>
-    <span class="n">dlogV_dlogP_T</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">dlogn_dlogP_T</span>
-    
-    <span class="n">spec_heat_v</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">spec_heat_p</span> <span class="o">+</span> <span class="n">gas</span><span class="o">.</span><span class="n">P</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">v</span> <span class="o">/</span> <span class="n">gas</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">dlogV_dlogT_P</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">dlogV_dlogP_T</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> 
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span>
+                <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">gamma</span><span class="p">)</span><span class="o">/</span><span class="n">gamma</span><span class="p">))</span>
+                <span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="n">gamma</span> <span class="o">=</span> <span class="n">spec_heat_p</span> <span class="o">/</span> <span class="n">spec_heat_v</span>
-    <span class="n">gamma_s</span> <span class="o">=</span> <span class="o">-</span><span class="n">gamma</span><span class="o">/</span><span class="n">dlogV_dlogP_T</span>
-    
-    <span class="k">return</span> <span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">spec_heat_p</span><span class="p">,</span> <span class="n">gamma_s</span>
+<span class="k">def</span> <span class="nf">root_area_ratio</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="n">area_ratio</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Returns zero for a given area ratio, pressure ratio, and gamma.</span>
+<span class="sd">    pressure ratio: chamber / exit</span>
+<span class="sd">    area ratio: exit / throat</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">area_ratio</span> <span class="o">-</span> <span class="n">get_area_ratio</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_thrust_coeff</span><span class="p">(</span><span class="n">pressure_ratio</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates thrust coefficient for optimum expansion.</span>
+<span class="sd">    pressure ratio: chamber / exit</span>
+<span class="sd">    area ratio: exit / throat</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> 
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> 
+        <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">pressure_ratio</span><span class="p">,</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">gamma</span><span class="p">))</span>
+        <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_cstar</span><span class="p">(</span><span class="n">Tc</span><span class="p">,</span> <span class="n">MW</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates cstar using chamber properties.&#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Ru</span> <span class="o">*</span> <span class="n">Tc</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">MW</span><span class="p">))</span> <span class="o">*</span> 
+        <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<div class="section" id="fixed-temperature-and-pressure">
+<h2>Fixed temperature and pressure<a class="headerlink" href="#fixed-temperature-and-pressure" title="Permalink to this headline">¶</a></h2>
+<p>Let’s first consider the problem where the pressure and temperature of the combustion/heating chamber are fixed and known, and determine the equilibrium composition of chemical species.
+This problem is relevant to an isothermal process, or where temperature is a design variable, such
+as in nuclear thermal or electrothermal rockets.</p>
+<p>For example, say we have an arcjet operating on gaseous hydrazine (N<sub>2</sub>H<sub>4</sub>)
+as a propellant, with a chamber temperature of 5000 K and pressure of 50 psia.
+The nozzle area ratio is 100, and the arcjet will operate in vacuum.
+For this system, determine the equilibrium composition, the average molecular weight, ratio of specific heats <span class="math notranslate nohighlight">\(\gamma\)</span>,
+and then use these to get <span class="math notranslate nohighlight">\(c^*\)</span>, <span class="math notranslate nohighlight">\(C_F\)</span>, and <span class="math notranslate nohighlight">\(I_{\textrm{sp}}\)</span>.</p>
+<p>In <a class="reference external" href="https://cearun.grc.nasa.gov/">CEA</a>, this is a <code class="docutils literal notranslate"><span class="pre">tp</span></code> problem, or fixed temperature and pressure problem.
+We should expect that, at such high temperatures, the equilibrium state will have mostly one- and two-atom
+molecules, based on the elements present: N<sub>2</sub>, H<sub>2</sub>, H, N, and HN.</p>
+<p>The CEA plaintext input file looks like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>prob tp
+ 
+p,psia= 50  t,k= 5000
+
+reac
+name N2H4 mol 1.0
+
+output siunits
+end
+</pre></div>
+</div>
+<p>and the output is (with the repeated input removed):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*******************************************************************************
+
+         NASA-GLENN CHEMICAL EQUILIBRIUM PROGRAM CEA2, FEBRUARY 5, 2004
+                   BY  BONNIE MCBRIDE AND SANFORD GORDON
+      REFS: NASA RP-1311, PART I, 1994 AND NASA RP-1311, PART II, 1996
+
+ *******************************************************************************
+
+               THERMODYNAMIC EQUILIBRIUM PROPERTIES AT ASSIGNED
+
+                           TEMPERATURE AND PRESSURE
+
+             REACTANT                    WT FRACTION      ENERGY      TEMP
+                                          (SEE NOTE)     KJ/KG-MOL      K  
+ NAME        N2H4                         1.0000000         0.000      0.000
+
+ O/F=    0.00000  %FUEL=  0.000000  R,EQ.RATIO= 0.000000  PHI,EQ.RATIO= 0.000000
+
+ THERMODYNAMIC PROPERTIES
+
+ P, BAR            3.4474
+ T, K             5000.00
+ RHO, KG/CU M    5.5368-2
+ H, KJ/KG         42058.0
+ U, KJ/KG         35831.8
+ G, KJ/KG       -103744.4
+ S, KJ/(KG)(K)    29.1605
+
+ M, (1/n)           6.677
+ (dLV/dLP)t      -1.04028
+ (dLV/dLT)p        1.4750
+ Cp, KJ/(KG)(K)   11.1350
+ GAMMAs            1.2548
+ SON VEL,M/SEC     2795.1
+
+ MOLE FRACTIONS
+
+ *H               0.74177
+ *H2              0.04573
+ *N               0.00806
+ *NH              0.00021
+ *N2              0.20422
+</pre></div>
+</div>
+<p>So, CEA not only provides the equilibrium composition in terms of mole fraction (<span class="math notranslate nohighlight">\(X_i\)</span>), but
+also the mean molecular weight of the mixture <span class="math notranslate nohighlight">\(MW\)</span>;
+thermodynamic properties and derivatives density <span class="math notranslate nohighlight">\(\rho\)</span>, enthalpy <span class="math notranslate nohighlight">\(h\)</span>, entropy <span class="math notranslate nohighlight">\(s\)</span>,
+<span class="math notranslate nohighlight">\(\left(\partial \log V / \partial \log P\right)_T\)</span>, <span class="math notranslate nohighlight">\(\left(\partial \log V / \partial \log T\right)_P\)</span>,
+specific heat <span class="math notranslate nohighlight">\(C_p = \partial h / \partial T)_P\)</span>, the ratio of specific heats (<span class="math notranslate nohighlight">\(\gamma\)</span>),
+and the sonic velocity (i.e., speed of sound) <span class="math notranslate nohighlight">\(a\)</span>. Some of these quantities are not particularly interesting to us right now, but we can use these quantities to find our quantities of interest.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gas</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;nasa_n2h4.cti&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">area_ratio</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">Tc</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
+<span class="n">Pc</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span>
 
-<span class="n">temperature</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
-<span class="n">pressure</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span>
-
-<span class="n">gas</span><span class="o">.</span><span class="n">TPX</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure</span><span class="p">),</span> <span class="s1">&#39;N2H4:1.0&#39;</span>
-
-<span class="c1"># set the gas to equilibrium at its current T and P</span>
-<span class="n">rtol</span><span class="o">=</span><span class="mf">1.0e-6</span>
-<span class="n">maxiter</span><span class="o">=</span><span class="mi">5000</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;TP&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">)</span>
+<span class="c1"># output from CEA</span>
+<span class="n">MW</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">6.677</span><span class="p">,</span> <span class="s1">&#39;kg/kmol&#39;</span><span class="p">)</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">1.2548</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>First, we need to find the exit pressure of the nozzle based on the area ratio:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial guesses for Pc / Pe</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">root_scalar</span><span class="p">(</span><span class="n">root_area_ratio</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">x1</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">area_ratio</span><span class="p">,</span> <span class="n">gamma</span><span class="p">))</span>
+<span class="n">Pc_Pe</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">root</span>
+<span class="n">Pe</span> <span class="o">=</span> <span class="n">Pc</span> <span class="o">/</span> <span class="n">Pc_Pe</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exit pressure = </span><span class="si">{</span><span class="n">Pe</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;psi&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .2e~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">gamma_s</span> <span class="o">=</span> <span class="n">get_thermo_properties</span><span class="p">(</span>
-    <span class="n">gas</span><span class="p">,</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="p">)</span>
+<span class="n">cstar</span> <span class="o">=</span> <span class="n">get_cstar</span><span class="p">(</span><span class="n">Tc</span><span class="p">,</span> <span class="n">MW</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cstar = </span><span class="si">{</span><span class="n">cstar</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .1f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cp = </span><span class="si">{</span><span class="n">cp</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(d log V/d log P)_T = </span><span class="si">{</span><span class="n">dlogV_dlogP_T</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(d log V/d log T)_P = </span><span class="si">{</span><span class="n">dlogV_dlogT_P</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gamma_s = </span><span class="si">{</span><span class="n">gamma_s</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">CF0</span> <span class="o">=</span> <span class="n">get_thrust_coeff</span><span class="p">(</span><span class="n">Pc_Pe</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+<span class="c1"># ambient pressure is zero in vacuum</span>
+<span class="n">CF</span> <span class="o">=</span> <span class="n">CF0</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">Pc_Pe</span><span class="p">)</span> <span class="o">*</span> <span class="n">area_ratio</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;C_F = </span><span class="si">{</span><span class="n">CF</span><span class="si">:</span><span class="s2"> .3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cp =  11091.25
-(d log V/d log P)_T = -1.0399
-(d log V/d log T)_P =  1.4713
-gamma_s =  1.2551
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Exit pressure = 2.54e-02 psi
+Cstar = 3786.6 m/s
+C_F =  1.884
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">speed_sound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">gamma_s</span> <span class="o">/</span> <span class="n">gas</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Speed of sound = </span><span class="si">{</span><span class="n">speed_sound</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> m/s&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Isp</span> <span class="o">=</span> <span class="n">CF</span> <span class="o">*</span> <span class="n">cstar</span> <span class="o">/</span> <span class="n">g0</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Isp = </span><span class="si">{</span><span class="n">Isp</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="si">:</span><span class="s2"> .1f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Speed of sound =  2796.1 m/s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Isp = 727.4 s
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># example: adiabatic combustion chamber temperature</span>
-
-<span class="n">temperature</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
-<span class="n">pressure</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;MPa&#39;</span><span class="p">)</span>
-
-<span class="n">gas2</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="s1">&#39;h2o2.cti&#39;</span><span class="p">)</span>
-<span class="n">gas2</span><span class="o">.</span><span class="n">TPX</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure</span><span class="p">),</span> <span class="s1">&#39;O2:0.5, H2:1.0&#39;</span>
-<span class="n">gas2</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;HP&#39;</span><span class="p">)</span>
-<span class="n">gas2</span><span class="p">()</span>
-</pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  ohmech:
-
-       temperature   3785.4 K
-          pressure   2e+07 Pa
-           density   10.288 kg/m^3
-  mean mol. weight   16.19 kg/kmol
-   phase of matter   gas
-
-                          1 kg             1 kmol     
-                     ---------------   ---------------
-          enthalpy       -4.8264e+05        -7.814e+06  J
-   internal energy       -2.4267e+06       -3.9288e+07  J
-           entropy             15262        2.4709e+05  J/K
-    Gibbs function       -5.8255e+07       -9.4314e+08  J
- heat capacity c_p            3280.1             53104  J/K
- heat capacity c_v            2766.5             44789  J/K
-
-                      mass frac. Y      mole frac. X     chem. pot. / RT
-                     ---------------   ---------------   ---------------
-                H2          0.013417           0.10775            -18.64
-                 H         0.0015639          0.025118           -9.3201
-                 O           0.01191          0.012052           -14.704
-                O2          0.061573          0.031154           -29.408
-                OH          0.095344          0.090764           -24.024
-               H2O           0.81537           0.73276           -33.344
-               HO2        0.00065346        0.00032053           -38.728
-              H2O2        0.00017088        8.1334e-05           -48.048
-     [   +1 minor]                 0                 0  
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">full_species</span> <span class="o">=</span> <span class="p">{</span><span class="n">S</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">S</span> <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">ct</span><span class="o">.</span><span class="n">Species</span><span class="o">.</span><span class="n">listFromFile</span><span class="p">(</span><span class="s1">&#39;nasa_gas.cti&#39;</span><span class="p">)}</span>
-
-<span class="n">species</span> <span class="o">=</span> <span class="p">[</span><span class="n">full_species</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="p">(</span>
-    <span class="s1">&#39;N2H4&#39;</span><span class="p">,</span> <span class="s1">&#39;N2&#39;</span><span class="p">,</span> <span class="s1">&#39;H2&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;NH&#39;</span>
-    <span class="p">)]</span>
-<span class="n">gas</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="n">thermo</span><span class="o">=</span><span class="s1">&#39;IdealGas&#39;</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">)</span>
-
-<span class="n">temperature</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
-<span class="n">pressure</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span>
-
-<span class="n">gas</span><span class="o">.</span><span class="n">TPX</span> <span class="o">=</span> <span class="n">to_si</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="n">to_si</span><span class="p">(</span><span class="n">pressure</span><span class="p">),</span> <span class="s1">&#39;N2H4:1.0&#39;</span>
-
-<span class="c1"># set the gas to equilibrium at its current T and P</span>
-<span class="n">gas</span><span class="o">.</span><span class="n">equilibrate</span><span class="p">(</span><span class="s1">&#39;TP&#39;</span><span class="p">)</span>
-
-<span class="n">derivs</span> <span class="o">=</span> <span class="n">get_thermo_derivatives</span><span class="p">(</span><span class="n">gas</span><span class="p">)</span>
-
-<span class="n">dlogV_dlogT_P</span><span class="p">,</span> <span class="n">dlogV_dlogP_T</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">gamma_s</span> <span class="o">=</span> <span class="n">get_thermo_properties</span><span class="p">(</span>
-    <span class="n">gas</span><span class="p">,</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">derivs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cp = </span><span class="si">{</span><span class="n">cp</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(d log V/d log P)_T = </span><span class="si">{</span><span class="n">dlogV_dlogP_T</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(d log V/d log T)_P = </span><span class="si">{</span><span class="n">dlogV_dlogT_P</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gamma_s = </span><span class="si">{</span><span class="n">gamma_s</span><span class="si">:</span><span class="s1"> .4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="n">speed_sound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">gas_constant</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">gamma_s</span> <span class="o">/</span> <span class="n">gas</span><span class="o">.</span><span class="n">mean_molecular_weight</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Speed of sound = </span><span class="si">{</span><span class="n">speed_sound</span><span class="si">:</span><span class="s1"> .1f</span><span class="si">}</span><span class="s1"> m/s&#39;</span><span class="p">)</span>
-
-<span class="n">gas</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cp =  11104.47
-(d log V/d log P)_T = -1.0400
-(d log V/d log T)_P =  1.4722
-gamma_s =  1.2549
-Speed of sound =  2795.8 m/s
-
-       temperature   5000 K
-          pressure   3.4474e+05 Pa
-           density   0.055346 kg/m^3
-  mean mol. weight   6.6743 kg/kmol
-   phase of matter   gas
-
-                          1 kg             1 kmol     
-                     ---------------   ---------------
-          enthalpy        4.2088e+07        2.8091e+08  J
-   internal energy         3.586e+07        2.3934e+08  J
-           entropy             29182        1.9477e+05  J/K
-    Gibbs function       -1.0382e+08       -6.9294e+08  J
- heat capacity c_p            3779.4             25225  J/K
- heat capacity c_v            2533.6             16910  J/K
-
-                      mass frac. Y      mole frac. X     chem. pot. / RT
-                     ---------------   ---------------   ---------------
-                N2            0.8567           0.20411           -30.731
-                H2          0.013688          0.045315            -24.65
-                 H            0.1121           0.74225           -12.325
-                 N          0.017042         0.0081204           -15.365
-                NH        0.00046864        0.00020831           -27.691
-     [   +1 minor]        2.3328e-15        4.8586e-16  
-</pre></div>
-</div>
-</div>
+<div class="section" id="adiabatic-combustion">
+<h2>Adiabatic combustion<a class="headerlink" href="#adiabatic-combustion" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
