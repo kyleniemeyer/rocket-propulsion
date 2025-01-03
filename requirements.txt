@@ -1,7 +1,8 @@
 # Requirements for the demo notebooks
 # Useful for MyBinder configuration
-jupyter-book>=0.8.1
 matplotlib
-pandas
 numpy
 scipy
+cantera
+fluids
+pint
