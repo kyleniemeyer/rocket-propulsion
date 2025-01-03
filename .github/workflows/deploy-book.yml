@@ -8,14 +8,8 @@ on:
 
 # This job installs dependencies, build the book, and pushes it to `gh-pages`
 jobs:
-  deploy-book:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
     - uses: actions/checkout@v4
 
@@ -46,6 +40,20 @@ jobs:
       uses: actions/upload-pages-artifact@v3
       with:
         path: "./book/_build/html"
+
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    steps:
 
     # Deploy the book's HTML to GitHub Pages
     - name: Deploy to GitHub Pages
