@@ -1,8 +1,9 @@
 # Requirements for the demo notebooks
 # Useful for MyBinder configuration
-matplotlib
+jupyter-book
 numpy
 scipy
+matplotlib
 cantera
 fluids
 pint
