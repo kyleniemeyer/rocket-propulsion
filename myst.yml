@@ -1,0 +1,48 @@
+version: 1
+project:
+  title: Rocket Propulsion Notes
+  description: Online textbook for introductory rocket propulsion course
+  authors:
+    - name: Kyle Niemeyer
+      email: kyle.niemeyer@oregonstate.edu
+  copyright: '2025'
+  github: kyleniemeyer/rocket-propulsion
+  thebe:
+    binder:
+      repo: kyleniemeyer/rocket-propulsion
+      provider: github
+      url: https://mybinder.org
+      ref: main
+  bibliography:
+    - references.bib
+  settings:
+    output_matplotlib_strings: remove
+    output_stderr: remove-warn
+  exports:
+    - format: pdf
+      template: plain_latex_book
+      output: exports/book.pdf
+  toc:
+    - file: intro.md
+    - file: solving-tips.ipynb
+    - file: fundamentals/thrust-rocket-equation.ipynb
+    - file: fundamentals/staging.ipynb
+    - file: fundamentals/ideal-rocket.ipynb
+    - file: thermochemistry/thermochemistry.ipynb
+    - file: thermochemistry/cea_cantera.ipynb
+    - file: chemical-rockets/hybrid-rockets.ipynb
+    - file: contributing.md
+
+site:
+  title: Rocket Propulsion notes
+  template: book-theme
+  actions:
+    - title: Support me
+      url: https://buymeacoffee.com/kyleniemeyer
+    - title: Suggestion box
+      url: https://github.com/kyleniemeyer/rocket-propulsion/issues/new/choose
+  options:
+    logo: images/logo/logo.jpg
+    favicon: images/logo/favicon.ico
+    folders: true
+    

@@ -1,9 +1,9 @@
 # Contributing to this book
 
-Welcome to the `computational-thermo` repository! We're excited you're here and want to contribute.
+Welcome to the `rocket-propulsion-book` repository! I'm excited you're here and want to contribute.
 
 These guidelines are designed to make it as easy as possible to get involved.
-If you have any questions that aren't discussed below, please let us know by opening an [issue][link_issues]!
+If you have any questions that aren't discussed below, please let me know by opening an [issue][link_issues]!
 
 Before you start you'll need to set up a free [GitHub][link_github] account and sign in.
 Here are some [instructions][link_signupinstructions].
@@ -13,11 +13,11 @@ to navigate this page!
 
 ## Joining the conversation
 
-`computational-thermo` is a  new project created by Kyle Niemeyer, for teaching thermodynamics using Python and related open-source software packages. 
+`rocket-propulsion-book` is a new project created by Kyle Niemeyer, for teaching an intro ro rocket propulsion course using Python and related open-source software packages. 
 
 Since this project currently involves a single primary contributor, there may not be many—or any—public conversations about the project. However, suggestions, contributions, and/or comments are welcome via [issues][link_issues].
 
-As a reminder, we expect all contributors to `computational-thermo` to adhere to the project [Code of Conduct][link_coc] in these conversations.
+As a reminder, we expect all contributors to `rocket-propulsion-book` to adhere to the project [Code of Conduct][link_coc] in these conversations.
 
 ## Contributing through GitHub
 
@@ -38,7 +38,7 @@ GitHub has a helpful page on
 
 Every project on GitHub uses [issues][link_issues] slightly differently.
 
-The following outlines how the `computational-thermo` developers think about these tools.
+The following outlines how the `rocket-propulsion-book` developers think about these tools.
 
 **Issues** are individual pieces of work that need to be completed to move the project forwards.
 A general guideline: if you find yourself tempted to write a great big issue that
@@ -47,7 +47,7 @@ is difficult to describe as one unit of work, please consider splitting it into 
 Issues are assigned [labels](#issue-labels) which explain how they relate to the overall project's
 goals and immediate next steps.
 
-
+(issue-labels)=
 ### Issue labels
 
 The current list of labels are [here][link_labels] and include:
@@ -78,7 +78,7 @@ The current list of labels are [here][link_labels] and include:
 
 ## Making a change
 
-We appreciate all contributions to `computational-thermo`, but those accepted fastest will follow a workflow similar to the following:
+We appreciate all contributions to `rocket-propulsion-book`, but those accepted fastest will follow a workflow similar to the following:
 
 **1. Comment on an existing issue or open a new issue referencing your addition.**
 
@@ -104,6 +104,7 @@ A member of the development team will review your changes to confirm that they c
 When opening the pull request, we ask that you follow some [specific conventions](#pull-requests).
 We outline these below.
 
+(pull-requests)=
 ### Pull Requests
 
 To improve understanding pull requests "at a glance", we encourage the use of several standardized tags.
@@ -133,7 +134,7 @@ and a project maintainer will review your proposed changes.
 
 ## Recognizing contributors
 
-We welcome and recognize all contributions from documentation to testing to code development.
+I welcome and recognize all contributions from documentation to testing to code development.
 You can see a list of current contributors in the [contributors tab][link_contributors].
 
 ## Thank you!
@@ -156,14 +157,14 @@ You're awesome.
 [sphinx]: http://www.sphinx-doc.org/en/master/index.html
 [readthedocs]: https://docs.readthedocs.io/en/latest/index.html
 
-[link_issues]: https://github.com/kyleniemeyer/computational-thermo/issues
-[link_coc]: https://github.com/kyleniemeyer/computational-thermo/blob/master/CODE_OF_CONDUCT.md
+[link_issues]: https://github.com/kyleniemeyer/rocket-propulsion-book/issues
+[link_coc]: https://github.com/kyleniemeyer/rocket-propulsion-book/blob/master/CODE_OF_CONDUCT.md
 
-[link_labels]: https://github.com/kyleniemeyer/computational-thermo/labels
-[link_bugs]: https://github.com/kyleniemeyer/computational-thermo/labels/bug
-[link_helpwanted]: https://github.com/kyleniemeyer/computational-thermo/labels/help%20wanted
-[link_enhancement]: https://github.com/kyleniemeyer/computational-thermo/labels/enhancement
-[link_question]: https://github.com/kyleniemeyer/computational-thermo/labels/question
+[link_labels]: https://github.com/kyleniemeyer/rocket-propulsion-book/labels
+[link_bugs]: https://github.com/kyleniemeyer/rocket-propulsion-book/labels/bug
+[link_helpwanted]: https://github.com/kyleniemeyer/rocket-propulsion-book/labels/help%20wanted
+[link_enhancement]: https://github.com/kyleniemeyer/rocket-propulsion-book/labels/enhancement
+[link_question]: https://github.com/kyleniemeyer/rocket-propulsion-book/labels/question
 
 [link_pullrequest]: https://help.github.com/articles/creating-a-pull-request/
 [link_fork]: https://help.github.com/articles/fork-a-repo/
@@ -173,5 +174,5 @@ You're awesome.
 
 [link_drafts]: https://help.github.com/articles/about-pull-requests/#draft-pull-requests
 
-[link_contributors]: https://github.com/kyleniemeyer/computational-thermo/graphs/contributors
+[link_contributors]: https://github.com/kyleniemeyer/rocket-propulsion-book/graphs/contributors
 [link_stemmrolemodels]: https://github.com/KirstieJane/STEMMRoleModels

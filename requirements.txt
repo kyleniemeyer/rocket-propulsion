@@ -1,6 +1,5 @@
 # Requirements for the demo notebooks
-# Useful for MyBinder configuration
-jupyter-book
+jupyter-book>=2.0.0
 numpy
 scipy
 matplotlib
