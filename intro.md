@@ -5,16 +5,20 @@ kernelspec:
 ---
 
 Rocket Propulsion notes
-==================
+=======================
 
-This is a book of supplementary notes for the ME 499/505: Propulsion course taught by 
+This is a book of supplementary notes for the AAE 462/562: Rocket Propulsion course taught by 
 [Prof. Kyle Niemeyer](https://niemeyer-research-group.github.io) at Oregon State University.
 
 The primary reference textbook for this course is *Rocket Propulsion Elements*, 
 by George P. Sutton & Oscar Biblarz, 9th edition, Wiley {cite}`sutton2016rocket`.
 Additional references will also be used.
 
-
+```{image} ./images/logo/logo.jpg
+:alt: Apollo 11 Saturn V launch vehicle
+:width: 300px
+:align: center
+```
 
 The logo for these notes shows the Apollo 11 Saturn V launch vehicle, lifting off
 on 16 July 1969, carrying Astronauts Neil Armstrong, Michael Collins, and Edwin Aldrin.

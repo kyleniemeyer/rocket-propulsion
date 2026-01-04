@@ -24,12 +24,19 @@ project:
       output: exports/book.pdf
   toc:
     - file: intro.md
+    - title: Computer setup
+      children:
+        - file: setup/linux.md
+        - file: setup/mac.md
+        - file: setup/windows.md
     - file: solving-tips.ipynb
     - file: fundamentals/thrust-rocket-equation.ipynb
     - file: fundamentals/staging.ipynb
     - file: fundamentals/ideal-rocket.ipynb
     - file: thermochemistry/thermochemistry.ipynb
     - file: thermochemistry/cea_cantera.ipynb
+    - file: chemical-rockets/liquid-rockets.ipynb
+    - file: chemical-rockets/solid-rockets.ipynb
     - file: chemical-rockets/hybrid-rockets.ipynb
     - file: contributing.md
 
