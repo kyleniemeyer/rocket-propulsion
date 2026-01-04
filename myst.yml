@@ -39,6 +39,12 @@ project:
     - file: chemical-rockets/solid-rockets.ipynb
     - file: chemical-rockets/hybrid-rockets.ipynb
     - file: contributing.md
+    - title: External resources
+      children:
+        - url: 'https://cearun.grc.nasa.gov'
+          title: NASA CEA webtool
+        - url: 'https://kyleniemeyer.github.io/gas-dynamics-notes/'
+          title: Gas dynamics ebook
 
 site:
   title: Rocket Propulsion notes
