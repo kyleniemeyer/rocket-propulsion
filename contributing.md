@@ -13,7 +13,7 @@ to navigate this page!
 
 ## Joining the conversation
 
-`rocket-propulsion-book` is a new project created by Kyle Niemeyer, for teaching an intro ro rocket propulsion course using Python and related open-source software packages. 
+`rocket-propulsion-book` is a new project created by Kyle Niemeyer, for teaching an introductory rocket propulsion course using Python and related open-source software packages. 
 
 Since this project currently involves a single primary contributor, there may not be many—or any—public conversations about the project. However, suggestions, contributions, and/or comments are welcome via [issues][link_issues].
 

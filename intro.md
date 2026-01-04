@@ -11,8 +11,12 @@ This is a book of supplementary notes for the AAE 462/562: Rocket Propulsion cou
 [Prof. Kyle Niemeyer](https://niemeyer-research-group.github.io) at Oregon State University.
 
 The primary reference textbook for this course is *Rocket Propulsion Elements*, 
-by George P. Sutton & Oscar Biblarz, 9th edition, Wiley {cite}`sutton2016rocket`.
-Additional references will also be used.
+by George P. Sutton & Oscar Biblarz, 9th edition, Wiley {cite:p}`sutton2016rocket`.
+Additional references will also be used, including:
+- *Fundamentals of Gas Dynamics* by Zucker & Biblarz {cite:p}`ZuckerBiblarz`
+- *Rocket and Spacecraft Propulsion: Principles, Practice and New Developments* by Turner {cite:p}`TurnerPropulsion`
+- *Mechanics and Thermodynamics of Propulsion* by Hill & Peterson {cite:p}`HillPeterson`
+- *Rocket Propulsion* by Heister, Anderson, Pourpoint, & Cassady {cite:p}`Heister2019`
 
 ```{image} ./images/logo/logo.jpg
 :alt: Apollo 11 Saturn V launch vehicle
