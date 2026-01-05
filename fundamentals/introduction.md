@@ -434,7 +434,7 @@ verification—that make propulsion useful.
 
 :::{attention} Why historical credit is uneven
 Work labeled "computing" was treated as clerical for decades. (How things have changed!)
-In addition, wartime and early Cold War secrey hid contributors, 
+In addition, wartime and early Cold War secrecy hid contributors, 
 while institutional barriers limited titles, authorship, and leadership roles.
 :::
 
