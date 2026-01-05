@@ -23,7 +23,6 @@ NASA astronauts demonstrating Newton's Third Law on the International Space Stat
 Skip to 1:54 to see the demo!
 :::
 
-
 Mathematically, thrust can be understood through the conservation of momentum. As mass is expelled at high velocity, the momentum change of the ejected mass equals the momentum change of the vehicle, but in the opposite direction.
 A common engineering form for rocket thrust that we'll derive later is
 $$
@@ -78,11 +77,11 @@ that can produce more thrust per unit of propellant,
 allowing for greater vehicle performance or reduced propellant requirements.
 
 
-## History of Rocket Propulsion
+## A brief history of rocket propulsion
 
 From Hero to von Braun.
 
-### Ancient Origins: Hero of Alexandria (10–70 CE)
+### Ancient origins: Hero of Alexandria (10–70 CE)
 
 The earliest known demonstration of reactive thrust comes from **Hero of Alexandria**,
 a Greco-Egyptian mathematician and engineer. 
@@ -109,7 +108,7 @@ until Newton's laws of motion were formulated centuries later.
 :::
 
 
-### Chinese Rockets (10th–13th Century CE)
+### Chinese rockets (10th–13th century CE)
 
 The practical development of rocket propulsion began in China 
 during the 10th century with the invention of **black-powder rockets** and fireworks. 
@@ -136,7 +135,7 @@ and eventually reached Europe, where it would continue to evolve.
 
 
 
-### Congreve Rocket (Early 19th Century)
+### Congreve rocket (early 19th century)
 
 **William Congreve** (1772–1827) developed a new generation of rocket artillery for the British military.
 His designs were inspired by rockets used against the British East India Company in India. 
@@ -155,7 +154,7 @@ The Congreve rocket represented the first systematic European development of mil
 Congreve rockets used during the Anglo-Mysore (India) Wars. Image source: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Congreve_rockets_new.png).
 :::
 
-### Jules Verne and Science Fiction (1878)
+### Jules Verne and science fiction (1878)
 
 In 1878, science fiction author **Jules Verne** published *From the Earth to the Moon*, 
 which captured the public imagination about space travel. 
@@ -283,13 +282,13 @@ Image sources: [NASA](https://commons.wikimedia.org/wiki/File:Seamans,_von_Braun
 :::
 
 
-## Categorization of Propulsion Systems
+## Categorization of propulsion systems
 
-### Air-Breathing vs. Rocket Propulsion
+### Air-breathing vs. rocket propulsion
 
 Propulsion systems can be fundamentally divided into two categories based on whether they carry their oxidizer or not:
 
-#### Rocket Propulsion
+#### Rocket propulsion
 
 - **All propellants carried onboard** (both fuel and oxidizer, or single monopropellant)
 - Propellants are ejected to produce thrust
@@ -312,7 +311,7 @@ Credit: [Pbroks13 (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:S
 Diagram of liquid rocket engine. Source: [NASA](https://www.grc.nasa.gov/www/k-12/airplane/lrockth.html).
 :::
 
-#### Air-Breathing Propulsion
+#### Air-breathing propulsion
 
 - **Only carries fuel onboard**; obtains oxidizer from atmospheric air
 - The majority of thrust comes from acceleration of air, combined with high mass flow rate
@@ -329,17 +328,17 @@ Schematic diagram illustrating operation of two spool, high-bypass turbofan engi
 Credit: [K. Aainsqatsi (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:Turbofan_operation.svg).
 :::
 
-### Advantages and Disadvantages
+### Advantages and disadvantages
 
-**Air-Breathing Propulsion:**
+**Air-breathing propulsion:**
 - ✓ Advantages: Much higher fuel efficiency for atmospheric flight and higher specific impulse; reduced propellant mass
 - ✗ Disadvantages: Cannot operate in vacuum; performance depends on atmospheric conditions (thrust drops with increasing altitude); limited to lower speeds (except for ramjets/scramjets)
 
-**Rocket Propulsion:**
+**Rocket propulsion:**
 - ✓ Advantages: Can operate anywhere (atmosphere or vacuum); performance independent of flight speed; can achieve very high velocities
 - ✗ Disadvantages: Must carry both fuel and oxidizer, resulting in lower mass efficiency and lower specific impulse; requires large propellant tanks
 
-## Types of Rocket Propulsion
+## Types of rocket propulsion
 
 Rocket propulsion systems can be categorized into four main types:
 1. **Chemical** (liquid, solid, hybrid)
@@ -347,7 +346,7 @@ Rocket propulsion systems can be categorized into four main types:
 3. **Nuclear** (thermal, electric)
 4. **Electric** (electrothermal, electrostatic/ion)
 
-### Chemical Rocket Propulsion
+### Chemical rocket propulsion
 
 Chemical rockets use **chemical reactions** in one or more propellants 
 to produce high temperatures in the thrust/combustion chamber. 
@@ -356,7 +355,7 @@ into high kinetic energy, which is exhausted to produce thrust.
 
 Chemical rockets are subdivided into three main categories:
 
-#### Liquid Propellant Engines
+#### Liquid propellant engines
 
 Liquid rocket engines store propellants as liquids in tanks and 
 feed them into a combustion/thrust chamber where chemical energy is released. 
@@ -382,7 +381,7 @@ Disadvantages:
 - Requires propellant handling and storage systems, particularly challenging for cryogenics
 - More expensive and complex than solid motors
 
-#### Solid Rocket Motors
+#### Solid rocket motors
 
 Solid rocket motors combine propellant storage, feed system, and thrust chamber into a **single case**. The fuel and oxidizer are mixed together into a **solid grain** that is cast or molded into the motor case.
 
@@ -409,7 +408,7 @@ Disadvantages:
 - Safety concerns with large quantities of propellant
 
 
-#### Hybrid Propellant Systems
+#### Hybrid propellant systems
 
 Hybrid rocket systems combine the best features of liquid and solid rockets.
 The typical configuration uses a **solid fuel grain** stored in the thrust chamber, 
@@ -436,7 +435,7 @@ Disadvantages:
 - Lower performance than liquid bipropellants
 - Limited flight heritage / demonstrations
 
-### Cold Gas Propulsion
+### Cold gas propulsion
 
 Cold gas systems use **stored high-pressure gas** as the working fluid. 
 Common gases include air, nitrogen, and helium. 
@@ -467,11 +466,11 @@ Disadvantages:
 **Warm gas** systems heat the gas before expansion to achieve higher performance, 
 though this adds complexity.
 
-### Nuclear Propulsion
+### Nuclear propulsion
 
 Nuclear propulsion uses nuclear reactions as the energy source rather than chemical reactions.
 
-#### Nuclear Thermal Propulsion
+#### Nuclear thermal propulsion
 
 Nuclear thermal rockets operate similarly to liquid propellant engines, 
 but **nuclear fission supplies heat** to a working fluid (typically hydrogen) 
@@ -489,7 +488,7 @@ Credit: [Tokino, vectorized by CommiM (Wikimedia Commons)](https://en.wikipedia.
 
 **Performance:** Very high specific impulse (800–1,000 seconds), approximately double that of chemical rockets.
 
-#### Nuclear Electric Propulsion
+#### Nuclear electric propulsion
 
 Nuclear electric systems use a nuclear powerplant to produce electricity, 
 which then powers an electric rocket propulsion system.
@@ -511,18 +510,18 @@ Disadvantages:
 - Regulatory and political challenges
 - Radiation shielding requirements
 
-### Electric Propulsion
+### Electric propulsion
 
 Electric propulsion systems use **electricity to add energy to the propellant**. 
 These systems offer very high specific impulse but relatively low thrust magnitude.
 
-#### Electrothermal Systems
+#### Electrothermal systems
 
 Electrothermal thrusters (resistojets and arcjets) **heat the propellant electrically**, 
 then expand it through a nozzle. Working fluids include hydrogen, ammonia, and helium.
 Used for satellites since the 1970s.
 
-#### Electrostatic/Ion Propulsion
+#### Electrostatic/ion propulsion
 
 Ion propulsion systems **ionize the working fluid** (typically xenon) and 
 then use electric fields to accelerate the electrically charged heavy ions 
@@ -548,7 +547,7 @@ Disadvantages:
 - Not suitable for launch or high-acceleration maneuvers
 
 
-## Performance and Typical Applications
+## Performance and typical applications
 
 The following table summarizes the performance characteristics and 
 typical applications for various propulsion technologies:
