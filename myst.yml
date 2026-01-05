@@ -7,12 +7,7 @@ project:
       email: kyle.niemeyer@oregonstate.edu
   copyright: '2025'
   github: kyleniemeyer/rocket-propulsion
-  thebe:
-    binder:
-      repo: kyleniemeyer/rocket-propulsion
-      provider: github
-      url: https://mybinder.org
-      ref: main
+  jupyter: true
   bibliography:
     - references.bib
   settings:
@@ -30,6 +25,7 @@ project:
         - file: setup/mac.md
         - file: setup/windows.md
     - file: solving-tips.ipynb
+    - file: fundamentals/introduction.md
     - file: fundamentals/thrust-rocket-equation.ipynb
     - file: fundamentals/staging.ipynb
     - file: fundamentals/ideal-rocket.ipynb
