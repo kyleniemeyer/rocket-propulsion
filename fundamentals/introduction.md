@@ -328,9 +328,10 @@ verify the electronic computer's calculations before his flight.
 Her work was also crucial for Apollo 11 and the Space Shuttle program. 
 She received the Presidential Medal of Freedom in 2015.
 
-**Dorothy Vaughan (1910–2008)** became NASA's first African American supervisor in 1949. 
-When IBM computers were introduced, she taught herself and her staff FORTRAN programming and 
-contributed to the Scout Launch Vehicle Program.
+**Dorothy Vaughan (1910–2008)** became NACA/NASA's first African American supervisor in 1949. 
+When IBM computers were introduced, she taught herself and her staff FORTRAN, 
+becoming one of the first female FORTRAN programmers, 
+and contributed to the Scout Launch Vehicle Program.
 
 **Mary Jackson (1921–2005)** became NASA's first African American female engineer in 1958, 
 analyzing data on air flow, thrust, and drag forces to improve aircraft and spacecraft design.
