@@ -15,6 +15,15 @@ The principle governing thrust is Newton's Third Law of Motion:
 When a propulsion system expels mass (such as hot gases), 
 it experiences an opposite force that propels the vehicle forward.
 
+:::{iframe} https://www.youtube.com/embed/dCF--YOjiOw?si=m3P3ab284bY_0Gpu
+:width: 100%
+:title: STEMonstrations: Newton's Third Law of Motion
+
+NASA astronauts demonstrating Newton's Third Law on the International Space Station.
+Skip to 1:54 to see the demo!
+:::
+
+
 Mathematically, thrust can be understood through the conservation of momentum. As mass is expelled at high velocity, the momentum change of the ejected mass equals the momentum change of the vehicle, but in the opposite direction.
 A common engineering form for rocket thrust that we'll derive later is
 $$
@@ -29,10 +38,6 @@ giving the thrust force $T$ (N).
 This approximate form of thrust is based on the "momentum flux" portion of thrust;
 there will also be a pressure term when the nozzle exit pressure differs from the ambient pressure.
 :::
-
-*[Image placeholder: Diagram showing thrust generation and Newton's Third Law]*
-
-*[Image placeholder: Reference to The Expanse physics demonstration]*
 
 :::{important} What is a *rocket*, exactly?
 A rocket is a device that produces thrust by ejecting stored matter, or **propellant**.
