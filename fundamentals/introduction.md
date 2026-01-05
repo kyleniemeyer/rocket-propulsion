@@ -7,6 +7,15 @@ which produces a reaction force in the opposite direction.
 This fundamental principle underlies all rocket and jet engines, 
 from the simple water rocket to the powerful engines that launch spacecraft into orbit.
 
+:::{figure} ../images/space-shuttle-atlantis.jpg
+:label: space-shuttle
+:align: center
+
+Space Shuttle Atlantis launching on the STS-27 mission on 2 December 1988,
+propelled by its two solid rocket boosters (SRBs) and cluster of three RS-25 engines
+(the Space Shuttle Main Engine, or SSME). Source: NASA.
+:::
+
 ### Thrust and Newton's Third Law
 
 **Thrust** is the force created due to a change in momentum by ejecting mass from a system. 
@@ -279,6 +288,153 @@ Von Braun represents both the technological advancement and the moral complexity
 ![V2 rocket](../images/V-2_rocket_diagram.svg)
 
 Image sources: [NASA](https://commons.wikimedia.org/wiki/File:Seamans,_von_Braun_and_President_Kennedy_at_Cape_Canaveral_-_GPN-2000-001843.jpg) and Wikimedia [commons](https://commons.wikimedia.org/wiki/File:V-2_rocket_diagram_(with_English_labels).svg).
+:::
+
+
+### Women in rocket propulsion and spaceflight development
+
+While the "Fathers of Modern Rocketry" are well known, 
+numerous women made critical contributions to rocket propulsion and space exploration, 
+often facing significant barriers based on gender and race.
+
+#### The "Human Computers" at JPL and NASA
+
+Teams of women mathematicians, known as **"human computers,"** performed the 
+complex calculations necessary for rocket trajectory design and mission planning 
+from the 1940s through the 1960s at both NASA's Jet Propulsion Laboratory and 
+Langley Research Center.
+
+:::{figure} ../images/NASA_computers_JPL.jpg
+:label: nasa-computers
+:align: center
+
+The women "human computers" of the Jet Propulsion Laboratory, shown in 1953.
+Source: [NASA/Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Computers_-_Janez_Lawson_(seen_in_this_photo_from_1953,_front_row,_fifth_from_the_left)_-_first_African_American_hired_into_a_technical_position_at_JPL.jpg).
+:::
+
+At JPL, **Barbara "Barby" Canright** calculated trajectories 
+for America's first satellite, Explorer 1, while 
+**Macie Roberts** supervised the computing section. 
+These women performed trajectory calculations, propellant performance analysis, and 
+mission planning for early missile and planetary exploration programs.
+
+At NASA Langley, African American women mathematicians worked in the 
+segregated West Area Computing unit, making groundbreaking contributions 
+despite facing both racial and gender discrimination:
+
+**Katherine Johnson (1918–2020)** calculated trajectories for Alan Shepard's Freedom 7 mission 
+and John Glenn's Friendship 7 orbital flight. Glenn specifically requested that Johnson 
+verify the electronic computer's calculations before his flight. 
+Her work was also crucial for Apollo 11 and the Space Shuttle program. 
+She received the Presidential Medal of Freedom in 2015.
+
+**Dorothy Vaughan (1910–2008)** became NASA's first African American supervisor in 1949. 
+When IBM computers were introduced, she taught herself and her staff FORTRAN programming and 
+contributed to the Scout Launch Vehicle Program.
+
+**Mary Jackson (1921–2005)** became NASA's first African American female engineer in 1958, 
+analyzing data on air flow, thrust, and drag forces to improve aircraft and spacecraft design.
+
+**Christine Darden (1942–)** joined Langley in 1967 and became an aerospace engineer 
+specializing in supersonic flight and sonic boom research, eventually becoming 
+the first African American woman promoted to the Senior Executive Service at NASA.
+
+These contributions were documented in *Hidden Figures* {cite:p}`HiddenFigures`,
+which was also adapted into a movie in 2016, 
+and all four women were awarded Congressional Gold Medals in 2024.
+
+:::{figure}
+:label: hidden figures
+:align: center
+:class: grid grid-cols-2 items-end gap-4
+
+![Katherine Johnson (1966)](../images/Katherine_Johnson_at_NASA,_in_1966.jpg)
+
+![Dorothy Vaughn](../images/Dorothy_Vaughan_IBM_Computer.jpg)
+
+![Mary Jackson](../images/Mary_Jackson_working.jpg)
+
+![Christine Darden](../images/Christine_Darden_in_computer_room_(LRC-1973-B701_P-05096).tiff.jpg)
+
+The "Hidden Figures" of NASA.
+Sources: [1](https://commons.wikimedia.org/wiki/File:Katherine_Johnson_at_NASA,_in_1966.jpg),
+[3](https://commons.wikimedia.org/wiki/File:Mary_Jackson_working_2_-_Restoration.jpg), [4](https://commons.wikimedia.org/wiki/File:Christine_Darden_in_computer_room_(LRC-1973-B701_P-05096).tiff)
+:::
+
+
+
+#### Engineering leadership in spacecraft and launch systems
+
+**Mary Sherman Morgan (1921–2004)** was an American chemist and engineer 
+who developed **Hydyne**, a high-performance rocket fuel used in the Jupiter-C launch vehicle. 
+Hydyne enabled the higher performance needed for the Explorer 1 launch 
+(first U.S. satellite) {cite:p}`RocketGirl`.
+
+:::{figure}
+:label: mary-sherman-morgan
+:align: center
+:class: grid grid-cols-2 items-end gap-4
+
+![Mary Sherman Morgan](../images/Mary_Sherman_Morgan.png)
+
+![Launch of Jupiter-C vehicle with Explorer 1](../images/Launch_of_Jupiter_C_with_Explorer_1.jpg)
+
+Image sources: [NASA/Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Launch_of_Jupiter_C_with_Explorer_1.jpg).
+:::
+
+**Margaret Hamilton (b. 1936)** led development of **Apollo flight software** at 
+MIT Instrumentation Lab, including core ideas around software engineering and the 
+**fault-tolerant behavior** that helped Apollo 11 succeed despite computer overload alarms.  
+
+:::{figure} ../images/Margaret_Hamilton.jpg
+:label: margaret-hamilton
+:align: center
+:width: 60%
+
+Margaret Hamilton shown in 1969 standing beside listings of the software developed by her and her team for the Apollo program's Lunar Module and Command Module.
+Source: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Margaret_Hamilton_-_restoration.jpg).
+:::
+
+:::{important}
+Rockets don't reach orbit on thrust alone. You need accurate modeling, navigation, and 
+verification—this is *mission-enabling propulsion-adjacent work*.
+:::
+
+**Frances “Poppy” Northcutt (b. 1943)** part of the team doing **return-to-Earth trajectory**
+calculations and mission operations for Apollo, becoming one of the first women in NASA mission control.
+
+**Yvonne Brill (1924-2013)** was a pioneering rocket propulsion engineer 
+who fundamentally changed satellite technology. 
+She began her career at Douglas Aircraft in the 1940s working on rocket propellants and engines, 
+believed to be the only woman rocket scientist in the United States at that time.
+Her most significant contribution was inventing the **electrothermal hydrazine thruster (EHT)**, 
+which increased satellite fuel efficiency by approximately 50%. 
+This innovation became an industry standard, with hundreds of these engines launched into space. 
+
+Brill also contributed to propulsion systems for NASA's TIROS weather satellite, 
+the Nova rockets for Apollo missions, and served as director of 
+NASA's Space Shuttle Solid Rocket Motor Program (1981-1983). 
+She received the National Medal of Technology and Innovation in 2011.
+
+:::{figure} ../images//yvonne-brill.png
+:label: yvonne-brill
+:align: center
+
+Yvonne Brill and electrothermal hydrazine thruster.
+Source: National Inventors Hall of Fame.
+:::
+
+#### Takeaways
+
+Even “pure propulsion” achievements (new propellants, injectors, turbopumps, nozzles) 
+only matter if the system can **navigate, control, and survive** the mission environment. 
+Many historical women contributors worked in the “glue” disciplines—computing, GN&C, 
+verification—that make propulsion useful.
+
+:::{attention} Why historical credit is uneven
+Work labeled "computing" was treated as clerical for decades. (How things have changed!)
+In addition, wartime and early Cold War secrey hid contributors, 
+while institutional barriers limited titles, authorship, and leadership roles.
 :::
 
 
