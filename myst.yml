@@ -29,6 +29,7 @@ project:
     - file: fundamentals/thrust-rocket-equation.ipynb
     - file: fundamentals/staging.ipynb
     - file: fundamentals/ideal-rocket.ipynb
+    - file: fundamentals/nozzle-design.ipynb
     - file: thermochemistry/thermochemistry.ipynb
     - file: thermochemistry/cea_cantera.ipynb
     - file: chemical-rockets/liquid-rockets.ipynb
